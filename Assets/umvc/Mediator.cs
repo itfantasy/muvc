@@ -52,7 +52,7 @@ namespace itfantasy.umvc
 
         protected virtual void OnDispose() { }
 
-        protected void SendToCommand(int index, int code, object value)
+        protected void SendNoticeToCommand(int code, object value)
         {
             Notice notice = new Notice(code, value, this);
             this._command.Execute(notice);

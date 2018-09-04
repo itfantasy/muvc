@@ -54,16 +54,16 @@ namespace itfantasy.umvc
             Facade.SendNotice(index, notice);
         }
 
-        protected void SendToMediator(int code, object value)
+        protected void SendNoticeToMediator(int code, object value)
         {
             if (_mediator != null)
             {
                 Notice notice = new Notice(code, value, this);
-                SendToMediator(notice);
+                SendNoticeToMediator(notice);
             }
         }
 
-        protected void SendToMediator(Notice notice)
+        protected void SendNoticeToMediator(Notice notice)
         {
             if (_mediator != null)
             {
