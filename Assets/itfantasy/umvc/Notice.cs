@@ -16,7 +16,7 @@ namespace itfantasy.umvc
         /// <summary>
         /// 信息体
         /// </summary>
-        public Dictionary<Type, NoticeParam> body = new Dictionary<Type, NoticeParam>();
+        public List<NoticeParam> body = new List<NoticeParam>();
 
         /// <summary>
         /// 创建者
@@ -37,7 +37,7 @@ namespace itfantasy.umvc
         {
             this.code = code;
             NoticeParam param = new NoticeParam(value, creator);
-            this.body[param.type] = param;
+            this.body.Add(param);
             this.creator = creator;
         }
 
@@ -54,31 +54,47 @@ namespace itfantasy.umvc
             }
         }
 
-        public bool PushParam(object value, object owner)
+        public void PushParam(object value, object owner)
         {
             NoticeParam param = new NoticeParam(value, owner);
-            if (!this.body.ContainsKey(param.type))
-            {
-                this.body[param.type] = param;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            this.body.Add(param);
         }
         
         public T GetParam<T>()
         {
             Type type = typeof(T);
-            if (this.body.ContainsKey(type))
+            foreach(NoticeParam param in this.body)
             {
-                return (T)this.body[type].value;
+                if(param.type == type)
+                {
+                    return (T)param.value;
+                }
             }
-            else
+            return default(T);
+        }
+
+        public List<T> GetParams<T>()
+        {
+            List<T> ret = new List<T>();
+            Type type = typeof(T);
+            foreach (NoticeParam param in this.body)
             {
-                return default(T);
+                if (param.type == type)
+                {
+                    ret.Add((T)param.value);
+                }
             }
+            return ret;
+        }
+
+        public ArrayList GetAllParams()
+        {
+            ArrayList ret = new ArrayList();
+            foreach (NoticeParam param in this.body)
+            {
+                ret.Add(param.value);   
+            }
+            return ret;
         }
 
         public string PrintStack()
@@ -100,6 +116,11 @@ namespace itfantasy.umvc
             this.type = value.GetType();
             this.value = value;
             this.owner = owner;
+        }
+
+        public override string ToString()
+        {
+            return "";
         }
     }
 
