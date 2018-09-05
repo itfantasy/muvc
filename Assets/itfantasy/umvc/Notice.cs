@@ -33,6 +33,16 @@ namespace itfantasy.umvc
         /// </summary>
         private object receiver;
 
+        /// <summary>
+        /// Command索引
+        /// </summary>
+        public int index = 0;
+
+        /// <summary>
+        /// 标签
+        /// </summary>
+        public object tag;
+
         public Notice(int code, object value, object creator)
         {
             this.code = code;
@@ -99,7 +109,17 @@ namespace itfantasy.umvc
 
         public string PrintStack()
         {
+            if(_printCallback != null)
+            {
+                _printCallback.Invoke("");
+            }
             return "";
+        }
+
+        private static Action<string> _printCallback;
+        public static void RegisterPrintCallback(Action<string> callback)
+        {
+            _printCallback = callback;
         }
     }
 

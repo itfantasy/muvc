@@ -68,8 +68,19 @@ namespace itfantasy.umvc
             if (_mediator != null)
             {
                 notice.AddPasser(this);
+                notice.SignReceiver(this._mediator);
                 _mediator.HandleNotice(notice);
             }
+        }
+
+        protected void PopNotice(int code)
+        {
+            Facade.PopNotice(code);
+        }
+
+        protected void PopNotices(int code)
+        {
+            Facade.PopNotices(code);
         }
 
         public virtual void Execute(Notice notice) { }
