@@ -7,7 +7,6 @@ namespace itfantasy.umvc
 {
     public interface IBaseProxy : IDisposable
     {
-        void SendNotice(int index, int code, object value);
-        void Dispose();
+        void SendNotice(int index, Notice notice);
     }
 }

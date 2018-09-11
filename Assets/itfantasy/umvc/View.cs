@@ -5,7 +5,7 @@ namespace itfantasy.umvc
 {
     public class View : MonoBehaviour
     {
-        public object token;
+        public object token { get; set; }
 
         void Awake()
         {

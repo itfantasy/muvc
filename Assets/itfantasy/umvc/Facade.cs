@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 namespace itfantasy.umvc
 {
@@ -36,13 +38,12 @@ namespace itfantasy.umvc
 
         #endregion
 
-        #region --------------------> notice管理
+        #region --------------------> notice机制
 
         public static void SendNotice(int index, Notice notice)
         {
             if (_commandDictionary.ContainsKey(index))
             {
-                notice.index = index;
                 _commandDictionary[index].Execute(notice);
             }
         }
@@ -56,86 +57,6 @@ namespace itfantasy.umvc
                     cmd.Execute(notice);
                 }
             }
-        }
-
-        private static List<Notice> _noticeStack = new List<Notice>();
-
-        public static void PushNotice(int index, Notice notice)
-        {
-            notice.index = index;
-            _noticeStack.Add(notice);
-        }
-
-        public static void PushBroadNotice(Notice notice)
-        {
-            _noticeStack.Add(notice);
-        }
-
-        public static void PopNotice(int code)
-        {
-            Notice target = null;
-            foreach (Notice notice in _noticeStack)
-            {
-                if (notice.code == code)
-                {
-                    if (notice.index == 0)
-                    {
-                        BroadNotice(notice);
-                    }
-                    else
-                    {
-                        SendNotice(notice.index, notice);
-                    }
-                    target = notice;
-                }
-            }
-            _noticeStack.Remove(target);
-        }
-
-        public static void PopNotices(int code)
-        {
-            List<Notice> dirtyNotice = new List<Notice>();
-            foreach(Notice notice in _noticeStack)
-            {
-                if(notice.code == code)
-                {
-                    dirtyNotice.Add(notice);
-                }
-            }
-            foreach(Notice notice in dirtyNotice)
-            {
-                if(notice.index == 0)
-                {
-                    BroadNotice(notice);
-                }
-                else
-                {
-                    SendNotice(notice.index, notice);
-                }
-                _noticeStack.Remove(notice);
-            }
-            dirtyNotice.Clear();
-        }
-
-        public static void PopAllNotices()
-        {
-            foreach (Notice notice in _noticeStack)
-            {
-                if (notice.index == 0)
-                {
-                    BroadNotice(notice);
-                }
-                else
-                {
-                    SendNotice(notice.index, notice);
-                }
-            }
-            _noticeStack.Clear();
-        }
-
-        public static void ClearStackNotices()
-        {
-            _noticeStack.Clear();
         }
 
         #endregion
@@ -156,14 +77,51 @@ namespace itfantasy.umvc
 
         public static void InitMVC()
         {
-            ClearStackNotices();
             _commandDictionary.Clear();
             foreach (IBaseProxy proxy in _proxyList)
             {
                 proxy.Dispose();
             }
             _proxyList.Clear();
+            SceneManager.sceneLoaded += OnSceneChange;
         }
 
+        private static string _curSceneName;
+
+        public static string curSceneName
+        {
+            get
+            {
+                return _curSceneName;
+            }
+        }
+
+        public static void OnSceneChange(Scene scene, LoadSceneMode mode)
+        {
+            _curSceneName = scene.name;
+            foreach (Command cmd in _commandDictionary.Values)
+            {
+                if (cmd.sceneName == _curSceneName)
+                {
+                    cmd.Execute(new Notice(Command.TryReactive));
+                }
+            }
+
+            if (waitSceneName != "" &&
+                waitSceneName == _curSceneName &&
+                waitSceneChangeCallback != null)
+            {
+                waitSceneChangeCallback.Invoke();
+            }
+        }
+
+        public static void WaitForSceneChangeOnce(string sceneName, Action callback)
+        {
+            waitSceneName = sceneName;
+            waitSceneChangeCallback = callback;
+        }
+
+        static string waitSceneName;
+        static Action waitSceneChangeCallback;
     }
 }

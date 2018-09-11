@@ -9,16 +9,23 @@ namespace itfantasy.umvc
         bool inited = false;
         Command _command = null;
 
+        public object token { get; set; }
+
         public void SignCommand(Command command)
         {
             this._command = command;
         }
 
-        // Use this for initialization
-        void Start()
+        void Awake()
         {
             OnInitialize();
             inited = true;
+        }
+
+        // Use this for initialization
+        void Start()
+        {
+            SetEventListener();
             OnShowing();
         }
 
@@ -41,7 +48,7 @@ namespace itfantasy.umvc
         }
 
         protected virtual void OnInitialize() {
-            SetClickListener();
+            
         }
 
         protected virtual void OnShowing() {
@@ -52,9 +59,8 @@ namespace itfantasy.umvc
 
         protected virtual void OnDispose() { }
 
-        protected void SendNoticeToCommand(int code, object value)
+        protected void SendNoticeToCommand(Notice notice)
         {
-            Notice notice = new Notice(code, value, this);
             this._command.Execute(notice);
         }
 
@@ -67,7 +73,7 @@ namespace itfantasy.umvc
 
         protected virtual void OnClick(GameObject go) { }
 
-        protected virtual void SetClickListener() { }
+        protected virtual void SetEventListener() { }
 
         protected virtual void UpdateViewContent() { }
 

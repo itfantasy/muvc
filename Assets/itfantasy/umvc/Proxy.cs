@@ -20,28 +20,9 @@ namespace itfantasy.umvc
             }
         }
 
-        public void SendNotice(int index, int code, object value)
+        public void SendNotice(int index, Notice notice)
         {
-            Notice notice = new Notice(code, value, this);
             Facade.SendNotice(index, notice);
-        }
-
-        public void BroadNotice(int code, object value)
-        {
-            Notice notice = new Notice(code, value, this);
-            Facade.BroadNotice(notice);
-        }
-
-        public void PushNotice(int index, int code, object value)
-        {
-            Notice notice = new Notice(code, value, this);
-            Facade.SendNotice(index, notice);
-        }
-
-        public void PushBroadNotice(int code, object value)
-        {
-            Notice notice = new Notice(code, value, this);
-            Facade.PushBroadNotice(notice);
         }
 
         public void Dispose()

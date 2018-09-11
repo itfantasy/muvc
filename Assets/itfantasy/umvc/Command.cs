@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
+using System;
 
 namespace itfantasy.umvc
 {
     public class Command
     {
+        public const int TryReactive = 101;
+        public const int SceneChange = 102;
 
         Mediator _mediator;
 
@@ -18,13 +22,36 @@ namespace itfantasy.umvc
             }
         }
 
+        private bool _isRegisted;
+        public bool isRegisted
+        {
+            get
+            {
+                return _isRegisted;
+            }
+        }
+
+        private string _sceneName;
+        public string sceneName
+        {
+            get
+            {
+                return _sceneName;
+            }
+        }
+
+        public object token;
+
         protected void RegisterMediator<T>(GameObject go) where T : Mediator
         {
             if (_mediator == null)
             {
                 _mediator = go.AddComponent<T>();
+                _mediator.SignCommand(this);
             }
             _mediator.gameObject.SetActive(true);
+            _sceneName = Facade.curSceneName;
+            _isRegisted = true;
         }
 
         protected void RemoveMediator(bool dispose=false)
@@ -40,12 +67,8 @@ namespace itfantasy.umvc
                     _mediator.gameObject.SetActive(false);
                 }
             }
-        }
-
-        protected void SendNotice(int index, int code, object value)
-        {
-            Notice notice = new Notice(code, value, this);
-            Facade.SendNotice(index, notice);
+            _sceneName = "";
+            _isRegisted = false;
         }
 
         protected void SendNotice(int index, Notice notice)
@@ -54,33 +77,13 @@ namespace itfantasy.umvc
             Facade.SendNotice(index, notice);
         }
 
-        protected void SendNoticeToMediator(int code, object value)
-        {
-            if (_mediator != null)
-            {
-                Notice notice = new Notice(code, value, this);
-                SendNoticeToMediator(notice);
-            }
-        }
-
         protected void SendNoticeToMediator(Notice notice)
         {
             if (_mediator != null)
             {
                 notice.AddPasser(this);
-                notice.SignReceiver(this._mediator);
                 _mediator.HandleNotice(notice);
             }
-        }
-
-        protected void PopNotice(int code)
-        {
-            Facade.PopNotice(code);
-        }
-
-        protected void PopNotices(int code)
-        {
-            Facade.PopNotices(code);
         }
 
         public virtual void Execute(Notice notice) { }
