@@ -19,15 +19,15 @@ public class Command2 : Command {
         switch (notice.code)
         {
             case Command2.Command2_Show:
-                GameObject go = GameObject.Find("Canvas2");
-                RegisterMediator<Mediator2>(go);
+                GameObject root = GameObject.Find("UIRoot");
+                RegisterMediator<Mediator2>(root.transform.Find("Canvas2").gameObject);
                 break;
             case Command2.Command2_OK:
-                Facade.WaitForSceneChangeOnce("scene1", () =>
+                Facade.WaitForSceneChangeOnce("Scene1", () =>
                 {
                     this.SendNotice(Command1.Command1_Index, notice);
                 });
-                SceneManager.LoadScene("scene1");
+                SceneManager.LoadScene("Scene1");
                 break;
             case Command1.Command1_OK:
                 this.SendNotice(Command2_Index, new Notice(Command2_Show));

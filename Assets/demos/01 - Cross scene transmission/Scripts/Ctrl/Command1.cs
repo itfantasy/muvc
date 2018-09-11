@@ -19,8 +19,8 @@ public class Command1 : Command {
         switch(notice.code)
         {
             case Command1.Command1_Show:
-                GameObject go = GameObject.Find("Canvas1");
-                RegisterMediator<Mediator1>(go);
+                GameObject root = GameObject.Find("UIRoot");
+                RegisterMediator<Mediator1>(root.transform.Find("Canvas1").gameObject);
                 break;
             case Command1.Command1_OK:
                 Facade.WaitForSceneChangeOnce("Scene2", () =>

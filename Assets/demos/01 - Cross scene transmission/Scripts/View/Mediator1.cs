@@ -25,7 +25,7 @@ public class Mediator1 : Mediator {
 
     protected override void OnClick(GameObject go)
     {
-        this.SendNoticeToCommand(new Scene1To2Vo(Command1.Command1_OK, "场景1传值给场景2"));
+        this.SendNoticeToCommand(new Scene1To2Vo(Command1.Command1_OK, this.view.input.text));
         base.OnClick(go);
     }
 
