@@ -20,6 +20,13 @@ namespace itfantasy.umvc
         /// </summary>
         private List<object> passers = new List<object>();
 
+        /// <summary>
+        /// 是否广播中
+        /// </summary>
+        public bool isBroading { get; set; }
+
+        public object tag;
+
         public Notice(int code)
         {
             this._code = code;
@@ -33,16 +40,26 @@ namespace itfantasy.umvc
 
         private void PrintStack()
         {
-            string stackInfo = "[ " + this.GetType().Name + " ] :: ";
-            if(this.passers.Count == 1)
+            string stackInfo = "[ " + this.GetType().Name + "|" + this._code.ToString() + " ] :: ";
+            if (!isBroading)
             {
-                stackInfo += this.passers[0].GetType().Name + " Created!!";
+                if (this.passers.Count == 1)
+                {
+                    stackInfo += this.passers[0].GetType().Name + " Created!!";
+                }
+                else if (this.passers.Count > 1)
+                {
+                    stackInfo += this.passers[this.passers.Count - 2].GetType().Name +
+                        "---->" +
+                        this.passers[this.passers.Count - 1].GetType().Name;
+                }
             }
-            else if(this.passers.Count > 1)
+            else
             {
-                stackInfo += this.passers[this.passers.Count - 2].GetType().Name + 
-                    "---->" + 
-                    this.passers[this.passers.Count - 1].GetType().Name;
+                if (this.passers.Count >= 1)
+                {
+                    stackInfo += this.passers[this.passers.Count - 1].GetType().Name + " Received!!";
+                }
             }
             Debug.Log(stackInfo);
         }

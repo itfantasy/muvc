@@ -15,7 +15,7 @@ namespace itfantasy.umvc
             this._params = _params;
         }
 
-        public object[] Params
+        public object[] paramArray
         {
             get
             {

@@ -25,6 +25,11 @@ namespace itfantasy.umvc
             Facade.SendNotice(index, notice);
         }
 
+        protected void BroadNotice(Notice notice)
+        {
+            Facade.BroadNotice(this, notice);
+        }
+
         public void Dispose()
         {
             _i = default(T);

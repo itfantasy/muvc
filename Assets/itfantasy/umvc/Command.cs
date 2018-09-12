@@ -86,6 +86,11 @@ namespace itfantasy.umvc
             }
         }
 
+        protected void BroadNotice(Notice notice)
+        {
+            Facade.BroadNotice(this, notice);
+        }
+
         public virtual void Execute(Notice notice) { }
         
     }

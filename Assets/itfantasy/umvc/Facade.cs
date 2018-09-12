@@ -48,12 +48,17 @@ namespace itfantasy.umvc
             }
         }
 
-        public static void BroadNotice(Notice notice)
+        public static void BroadNotice(object sender, Notice notice)
         {
+            notice.isBroading = true;
             foreach (Command cmd in _commandDictionary.Values)
             {
                 if (cmd.isActive)
                 {
+                    if(sender is Command && (sender as Command) == cmd)
+                    {
+                        continue;
+                    }
                     cmd.Execute(notice);
                 }
             }
