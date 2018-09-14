@@ -7,7 +7,7 @@ using itfantasy.umvc;
 
 class Recv2Command : Command
 {
-    public const int Index = Worker_Cloud.CommandIndex + 300;
+    public const int Index = Worker_Cloud.Index + 300;
     public const int Recv2Command_Show = Index + 1;
 
     public override void Execute(INotice notice)

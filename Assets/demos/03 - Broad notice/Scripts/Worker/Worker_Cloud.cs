@@ -9,8 +9,8 @@ using itfantasy.umvc;
 /// </summary>
 public class Worker_Cloud {
 
-    public const int CommandIndex = 30000;
-    public const int Broad_AddValue = CommandIndex + 1;
+    public const int Index = 30000;
+    public const int Broad_AddValue = Index + 1;
 
     public static void RegisterCommands()
     {

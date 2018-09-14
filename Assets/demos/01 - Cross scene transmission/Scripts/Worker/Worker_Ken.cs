@@ -9,7 +9,7 @@ using itfantasy.umvc;
 /// </summary>
 public class Worker_Ken {
 
-    public const int CommandIndex = 10000;
+    public const int Index = 10000;
 
 	public static void RegisterCommands()
     {

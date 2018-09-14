@@ -9,7 +9,7 @@ using itfantasy.umvc;
 /// </summary>
 public class BroadCommand : Command {
 
-    public const int Index = Worker_Cloud.CommandIndex + 100;
+    public const int Index = Worker_Cloud.Index + 100;
     public const int BroadCommand_Show = Index + 1;
 
     public override void Execute(INotice notice)

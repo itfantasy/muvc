@@ -7,7 +7,7 @@ using itfantasy.umvc;
 public class Worker_Light
 {
 
-    public const int CommandIndex = 20000;
+    public const int Index = 20000;
 
     public static void RegisterCommands()
     {

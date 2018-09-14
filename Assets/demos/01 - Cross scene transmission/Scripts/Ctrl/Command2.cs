@@ -10,7 +10,7 @@ using itfantasy.umvc;
 /// </summary>
 public class Command2 : Command {
 
-    public const int Index = Worker_Ken.CommandIndex + 200;
+    public const int Index = Worker_Ken.Index + 200;
     public const int Command2_Show = Index + 1;
     public const int Command2_OK = Index + 2;
 

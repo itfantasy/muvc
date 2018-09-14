@@ -9,7 +9,7 @@ using itfantasy.umvc;
 /// </summary>
 public class SubCommand : Command {
 
-    public const int Index = Worker_Light.CommandIndex + 200;
+    public const int Index = Worker_Light.Index + 200;
     public const int SubCommand_Show = Index + 1;
     public const int SubCommand_Close = Index + 2;
     public const int SubCommand_OK = Index + 3;
