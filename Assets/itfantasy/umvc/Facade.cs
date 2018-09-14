@@ -40,25 +40,32 @@ namespace itfantasy.umvc
 
         #region --------------------> notice机制
 
-        public static void SendNotice(int index, Notice notice)
+        public static void SendNotice(int cmdIndex, int noticeType, object[] body=null)
         {
-            if (_commandDictionary.ContainsKey(index))
+            if (_commandDictionary.ContainsKey(cmdIndex))
             {
-                _commandDictionary[index].Execute(notice);
+                Notice notice = new Notice(noticeType, body);
+                _commandDictionary[cmdIndex].Execute(notice);
             }
         }
 
-        public static void BroadNotice(object sender, Notice notice)
+        public static void SendAsyncNotice(int cmdIndex, int noticeType, Action<object> callback, object token, object[] body=null)
         {
-            notice.isBroading = true;
+            if (_commandDictionary.ContainsKey(cmdIndex))
+            {
+                Notice notice = new Notice(noticeType, body);
+                notice.SetCallback(callback, token);
+                _commandDictionary[cmdIndex].Execute(notice);
+            }
+        }
+
+        public static void BroadNotice(int noticeType, object[] body=null)
+        {
             foreach (Command cmd in _commandDictionary.Values)
             {
                 if (cmd.isActive)
                 {
-                    if(sender is Command && (sender as Command) == cmd)
-                    {
-                        continue;
-                    }
+                    Notice notice = new Notice(noticeType, body);
                     cmd.Execute(notice);
                 }
             }
@@ -108,7 +115,7 @@ namespace itfantasy.umvc
             {
                 if (cmd.sceneName == _curSceneName)
                 {
-                    cmd.Execute(new Notice(Command.TryReactive));
+                    cmd.Execute(new Notice(Command.TryReactive, null));
                 }
             }
 

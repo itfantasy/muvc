@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 namespace itfantasy.umvc
@@ -20,14 +21,19 @@ namespace itfantasy.umvc
             }
         }
 
-        public void SendNotice(int index, Notice notice)
+        public void SendNotice(int cmdIndex, int noticeType, params object[] body)
         {
-            Facade.SendNotice(index, notice);
+            Facade.SendNotice(cmdIndex, noticeType, body);
         }
 
-        protected void BroadNotice(Notice notice)
+        protected void SendAsyncNotice(int cmdIndex, int noticeType, Action<object> callback, object token, params object[] body)
         {
-            Facade.BroadNotice(this, notice);
+            Facade.SendAsyncNotice(cmdIndex, noticeType, callback, token, body);
+        }
+
+        protected void BroadNotice(int noticeType, object[] body)
+        {
+            Facade.BroadNotice(noticeType, body);
         }
 
         public void Dispose()

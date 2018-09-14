@@ -13,9 +13,9 @@ public class Worker_Ken {
 
 	public static void RegisterCommands()
     {
-        Facade.RegisterCommand(Command1.Command1_Index, new Command1());
-        Facade.RegisterCommand(Command2.Command2_Index, new Command2());
+        Facade.RegisterCommand(Command1.Index, new Command1());
+        Facade.RegisterCommand(Command2.Index, new Command2());
 
-        Facade.SendNotice(Command1.Command1_Index, new Notice(Command1.Command1_Show));
+        Facade.SendNotice(Command1.Index, Command1.Command1_Show);
     }
 }

@@ -11,10 +11,10 @@ public class Worker_Light
 
     public static void RegisterCommands()
     {
-        Facade.RegisterCommand(MainCommand.MainCommand_Index, new MainCommand());
-        Facade.RegisterCommand(SubCommand.SubCommand_Index, new SubCommand());
+        Facade.RegisterCommand(MainCommand.Index, new MainCommand());
+        Facade.RegisterCommand(SubCommand.Index, new SubCommand());
 
-        Facade.SendNotice(MainCommand.MainCommand_Index, new Notice(MainCommand.MainCommand_Show));
+        Facade.SendNotice(MainCommand.Index, MainCommand.MainCommand_Show);
     }
 }
 

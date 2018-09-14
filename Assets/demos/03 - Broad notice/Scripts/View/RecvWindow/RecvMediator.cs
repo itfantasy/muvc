@@ -14,13 +14,12 @@ class RecvMediator : Mediator
         base.OnInitialize();
     }
 
-    public override void HandleNotice(Notice notice)
+    public override void HandleNotice(INotice notice)
     {
-        switch(notice.code)
+        switch(notice.GetType())
         {
-            case BroadCommand.BroadCommand_AddValue:
-                QuickNotice quick = notice as QuickNotice;
-                this.view.num += (int)quick.paramArray[0];
+            case Worker_Cloud.Broad_AddValue:
+                this.view.num += (int)notice.GetBody()[0];
                 break;
         }
         base.HandleNotice(notice);

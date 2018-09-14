@@ -10,15 +10,16 @@ using itfantasy.umvc;
 public class Worker_Cloud {
 
     public const int CommandIndex = 30000;
+    public const int Broad_AddValue = CommandIndex + 1;
 
     public static void RegisterCommands()
     {
-        Facade.RegisterCommand(BroadCommand.BroadCommand_Index, new BroadCommand());
-        Facade.RegisterCommand(Recv1Command.Recv1Command_Index, new Recv1Command());
-        Facade.RegisterCommand(Recv2Command.Recv2Command_Index, new Recv2Command());
+        Facade.RegisterCommand(BroadCommand.Index, new BroadCommand());
+        Facade.RegisterCommand(Recv1Command.Index, new Recv1Command());
+        Facade.RegisterCommand(Recv2Command.Index, new Recv2Command());
 
-        Facade.SendNotice(BroadCommand.BroadCommand_Index, new Notice(BroadCommand.BroadCommand_Show));
-        Facade.SendNotice(Recv1Command.Recv1Command_Index, new Notice(Recv1Command.Recv1Command_Show));
-        Facade.SendNotice(Recv2Command.Recv2Command_Index, new Notice(Recv2Command.Recv2Command_Show));
+        Facade.SendNotice(BroadCommand.Index, BroadCommand.BroadCommand_Show);
+        Facade.SendNotice(Recv1Command.Index, Recv1Command.Recv1Command_Show);
+        Facade.SendNotice(Recv2Command.Index, Recv2Command.Recv2Command_Show);
     }
 }

@@ -10,6 +10,13 @@ using itfantasy.umvc;
 public class Mediator2 : Mediator {
 
     View2 view;
+    Command2 cmd
+    {
+        get
+        {
+            return this._command as Command2;
+        }
+    }
 
     protected override void OnInitialize()
     {
@@ -25,16 +32,16 @@ public class Mediator2 : Mediator {
 
     protected override void OnClick(GameObject go)
     {
-        this.SendNoticeToCommand(new Scene2To1Vo(Command2.Command2_OK, this.view.input.text));
+        this.cmd.TransValueToScene1(this.view.input.text);
         base.OnClick(go);
     }
 
-    public override void HandleNotice(Notice notice)
+    public override void HandleNotice(INotice notice)
     {
-        switch (notice.code)
+        switch (notice.GetType())
         {
-            case Command1.Command1_OK:
-                this.view.input.text = (notice as Scene1To2Vo).value;
+            case Command2.Command2_OK:
+                this.view.input.text = notice.GetBody()[0].ToString();
                 break;
         }
         base.HandleNotice(notice);

@@ -7,7 +7,7 @@ namespace itfantasy.umvc
     public class Mediator : MonoBehaviour, IDisposable
     {
         bool inited = false;
-        Command _command = null;
+        protected Command _command = null;
 
         public object token { get; set; }
 
@@ -59,17 +59,12 @@ namespace itfantasy.umvc
 
         protected virtual void OnDispose() { }
 
-        protected void SendNoticeToCommand(Notice notice)
-        {
-            this._command.Execute(notice);
-        }
-
         protected T AttachView<T>() where T : View
         {
             return this.gameObject.AddComponent<T>();
         }
 
-        public virtual void HandleNotice(Notice notice) { }
+        public virtual void HandleNotice(INotice notice) { }
 
         protected virtual void OnClick(GameObject go) { }
 

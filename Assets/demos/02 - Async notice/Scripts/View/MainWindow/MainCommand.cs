@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using itfantasy.umvc;
@@ -9,14 +10,14 @@ using itfantasy.umvc;
 /// </summary>
 public class MainCommand : Command {
 
-    public const int MainCommand_Index = Worker_Light.CommandIndex + 100;
-    public const int MainCommand_Show = MainCommand_Index + 1;
-    public const int MainCommand_Close = MainCommand_Index + 2;
-    public const int MainCommand_OK = MainCommand_Index + 3;
+    public const int Index = Worker_Light.CommandIndex + 100;
+    public const int MainCommand_Show = Index + 1;
+    public const int MainCommand_Close = Index + 2;
+    public const int MainCommand_OK = Index + 3;
 
-    public override void Execute(Notice notice)
+    public override void Execute(INotice notice)
     {
-        switch(notice.code)
+        switch(notice.GetType())
         {
             case MainCommand_Show:
                 GameObject root = GameObject.Find("UIRoot");
@@ -25,10 +26,12 @@ public class MainCommand : Command {
             case MainCommand_Close:
                 RemoveMediator();
                 break;
-            case MainCommand_OK:
-                SendNotice(SubCommand.SubCommand_Index, notice);
-                break;
         }
         base.Execute(notice);
+    }
+
+    public void AsyncMainToSub(Action<object> callback, object token)
+    {
+        SendAsyncNotice(SubCommand.Index, SubCommand.SubCommand_OK, callback, token);
     }
 }

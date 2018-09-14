@@ -9,14 +9,14 @@ using itfantasy.umvc;
 /// </summary>
 public class SubCommand : Command {
 
-    public const int SubCommand_Index = Worker_Light.CommandIndex + 200;
-    public const int SubCommand_Show = SubCommand_Index + 1;
-    public const int SubCommand_Close = SubCommand_Index + 2;
-    public const int SubCommand_OK = SubCommand_Index + 3;
+    public const int Index = Worker_Light.CommandIndex + 200;
+    public const int SubCommand_Show = Index + 1;
+    public const int SubCommand_Close = Index + 2;
+    public const int SubCommand_OK = Index + 3;
 
-    public override void Execute(Notice notice)
+    public override void Execute(INotice notice)
     {
-        switch(notice.code)
+        switch(notice.GetType())
         {
             case SubCommand_Show:
                 GameObject root = GameObject.Find("UIRoot");
@@ -25,11 +25,20 @@ public class SubCommand : Command {
             case SubCommand_Close:
                 RemoveMediator();
                 break;
-            case MainCommand.MainCommand_OK:
-                SendNotice(SubCommand_Index, new Notice(SubCommand_Show));
-                SendNoticeToMediator(notice);
+            case SubCommand_OK:
+                SendNotice(Index, SubCommand_Show);
+                SendNotice(notice);
                 break;
         }
         base.Execute(notice);
+    }
+
+    public void FinishNotice(INotice notice)
+    {
+        this.SendNotice(Index, SubCommand_Close);
+        if (notice != null)
+        {
+            notice.Finish();
+        }
     }
 }

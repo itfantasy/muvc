@@ -8,7 +8,15 @@ using itfantasy.umvc;
 public class SubMediator : Mediator
 {
     SubView view;
-    MainToSubVo mainToSubVo;
+    SubCommand cmd
+    {
+        get
+        {
+            return this._command as SubCommand;
+        }
+    }
+
+    INotice _notice;
 
     protected override void OnInitialize()
     {
@@ -24,21 +32,17 @@ public class SubMediator : Mediator
 
     protected override void OnClick(GameObject go)
     {
-        if (this.mainToSubVo != null)
-        {
-            this.mainToSubVo.Done();
-        }
-        this.SendNoticeToCommand(new Notice(SubCommand.SubCommand_Close));
+        this.cmd.FinishNotice(this._notice);
         base.OnClick(go);
     }
 
-    public override void HandleNotice(Notice notice)
+    public override void HandleNotice(INotice notice)
     {
-        switch(notice.code)
+        switch(notice.GetType())
         {
-            case MainCommand.MainCommand_OK:
-                mainToSubVo = notice as MainToSubVo;
-                this.view.text.text = mainToSubVo.token.ToString();
+            case SubCommand.SubCommand_OK:
+                this.view.text.text = notice.GetToken().ToString();
+                this._notice = notice;
                 break;
         }
         base.HandleNotice(notice);

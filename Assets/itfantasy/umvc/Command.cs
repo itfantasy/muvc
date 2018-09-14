@@ -7,8 +7,7 @@ namespace itfantasy.umvc
 {
     public class Command
     {
-        public const int TryReactive = 101;
-        public const int SceneChange = 102;
+        public const int TryReactive = 9999;
 
         Mediator _mediator;
 
@@ -71,27 +70,30 @@ namespace itfantasy.umvc
             _isRegisted = false;
         }
 
-        protected void SendNotice(int index, Notice notice)
+        protected void SendNotice(int cmdIndex, int noticeType, params object[] body)
         {
-            notice.AddPasser(this);
-            Facade.SendNotice(index, notice);
+            Facade.SendNotice(cmdIndex, noticeType, body);
         }
 
-        protected void SendNoticeToMediator(Notice notice)
+        protected void SendAsyncNotice(int cmdIndex, int noticeType, Action<object> callback, object token, params object[] body)
+        {
+            Facade.SendAsyncNotice(cmdIndex, noticeType, callback, token, body);
+        }
+
+        protected void SendNotice(INotice notice)
         {
             if (_mediator != null)
             {
-                notice.AddPasser(this);
                 _mediator.HandleNotice(notice);
             }
         }
 
-        protected void BroadNotice(Notice notice)
+        protected void BroadNotice(int noticeType, params object[] body)
         {
-            Facade.BroadNotice(this, notice);
+            Facade.BroadNotice(noticeType, body);
         }
 
-        public virtual void Execute(Notice notice) { }
+        public virtual void Execute(INotice notice) { }
         
     }
 }

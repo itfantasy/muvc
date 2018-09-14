@@ -8,6 +8,13 @@ using itfantasy.umvc;
 public class BroadMediator : Mediator
 {
     BroadView view;
+    BroadCommand cmd
+    {
+        get
+        {
+            return this._command as BroadCommand;
+        }
+    }
 
     protected override void OnInitialize()
     {
@@ -23,7 +30,7 @@ public class BroadMediator : Mediator
 
     protected override void OnClick(GameObject go)
     {
-        SendNoticeToCommand(new QuickNotice(BroadCommand.BroadCommand_AddValue, 10));
+        this.cmd.BroadAddValue(10);
         base.OnClick(go);
     }
 }

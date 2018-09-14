@@ -7,61 +7,60 @@ using UnityEngine;
 
 namespace itfantasy.umvc
 {
-    public class Notice
+    public class Notice : INotice
     {
-        /// <summary>
-        /// 命令码
-        /// </summary>
-        public int code { get { return this._code; } }
-        private int _code;
+        int _type;
+        object[] _body;
+        Action<object> _callback;
+        object _token;
 
-        /// <summary>
-        /// 传递者
-        /// </summary>
-        private List<object> passers = new List<object>();
+        public object tag { get; set; }
 
-        /// <summary>
-        /// 是否广播中
-        /// </summary>
-        public bool isBroading { get; set; }
-
-        public object tag;
-
-        public Notice(int code)
+        public Notice(int type, object[] body)
         {
-            this._code = code;
+            this._type = type;
+            this._body = body;
         }
 
-        public void AddPasser(object passers)
+        public new int GetType()
         {
-            this.passers.Add(passers);
-            this.PrintStack();
+            return this._type;
         }
 
-        private void PrintStack()
+        public object[] GetBody()
         {
-            string stackInfo = "[ " + this.GetType().Name + "|" + this._code.ToString() + " ] :: ";
-            if (!isBroading)
+            return this._body;
+        }
+
+        public T GetBody<T>()
+        {
+            foreach(object val in this._body)
             {
-                if (this.passers.Count == 1)
+                if(val is T)
                 {
-                    stackInfo += this.passers[0].GetType().Name + " Created!!";
-                }
-                else if (this.passers.Count > 1)
-                {
-                    stackInfo += this.passers[this.passers.Count - 2].GetType().Name +
-                        "---->" +
-                        this.passers[this.passers.Count - 1].GetType().Name;
+                    return (T)val;
                 }
             }
-            else
+            return default(T);
+        }
+
+        public void Finish()
+        {
+            if (this._callback != null)
             {
-                if (this.passers.Count >= 1)
-                {
-                    stackInfo += this.passers[this.passers.Count - 1].GetType().Name + " Received!!";
-                }
+                this._callback.Invoke(this._token);
             }
-            Debug.Log(stackInfo);
+        }
+
+        public void SetCallback(Action<object> callback, object token)
+        {
+            this._callback = callback;
+            this._token = token;
+        }
+
+        public object GetToken()
+        {
+            return this._token;
         }
     }
 }

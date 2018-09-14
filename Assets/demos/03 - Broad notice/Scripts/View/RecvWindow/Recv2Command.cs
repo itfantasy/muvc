@@ -7,19 +7,19 @@ using itfantasy.umvc;
 
 class Recv2Command : Command
 {
-    public const int Recv2Command_Index = Worker_Cloud.CommandIndex + 300;
-    public const int Recv2Command_Show = Recv2Command_Index + 1;
+    public const int Index = Worker_Cloud.CommandIndex + 300;
+    public const int Recv2Command_Show = Index + 1;
 
-    public override void Execute(Notice notice)
+    public override void Execute(INotice notice)
     {
-        switch(notice.code)
+        switch(notice.GetType())
         {
             case Recv2Command_Show:
                 GameObject root = GameObject.Find("UIRoot");
                 RegisterMediator<RecvMediator>(root.transform.Find("Recv2Window").gameObject);
                 break;
-            case BroadCommand.BroadCommand_AddValue:
-                SendNoticeToMediator(notice);
+            case Worker_Cloud.Broad_AddValue:
+                SendNotice(notice);
                 break;
         }
         base.Execute(notice);

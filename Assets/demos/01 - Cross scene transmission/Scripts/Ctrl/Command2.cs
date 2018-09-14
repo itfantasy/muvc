@@ -10,30 +10,32 @@ using itfantasy.umvc;
 /// </summary>
 public class Command2 : Command {
 
-    public const int Command2_Index = Worker_Ken.CommandIndex + 200;
-    public const int Command2_Show = Command2_Index + 1;
-    public const int Command2_OK = Command2_Index + 2;
+    public const int Index = Worker_Ken.CommandIndex + 200;
+    public const int Command2_Show = Index + 1;
+    public const int Command2_OK = Index + 2;
 
-    public override void Execute(Notice notice)
+    public override void Execute(INotice notice)
     {
-        switch (notice.code)
+        switch (notice.GetType())
         {
-            case Command2.Command2_Show:
+            case Command2_Show:
                 GameObject root = GameObject.Find("UIRoot");
                 RegisterMediator<Mediator2>(root.transform.Find("Canvas2").gameObject);
                 break;
-            case Command2.Command2_OK:
-                Facade.WaitForSceneChangeOnce("Scene1", () =>
-                {
-                    this.SendNotice(Command1.Command1_Index, notice);
-                });
-                SceneManager.LoadScene("Scene1");
-                break;
-            case Command1.Command1_OK:
-                this.SendNotice(Command2_Index, new Notice(Command2_Show));
-                this.SendNoticeToMediator(notice);
+            case Command2_OK:
+                this.SendNotice(Index, Command2_Show);
+                this.SendNotice(notice);
                 break;
         }
         base.Execute(notice);
+    }
+
+    public void TransValueToScene1(string msg)
+    {
+        Facade.WaitForSceneChangeOnce("Scene1", () =>
+        {
+            this.SendNotice(Command1.Index, Command1.Command1_OK, msg);
+        });
+        SceneManager.LoadScene("Scene1");
     }
 }
