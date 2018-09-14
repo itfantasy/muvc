@@ -80,6 +80,12 @@ namespace itfantasy.umvc
             Facade.SendAsyncNotice(cmdIndex, noticeType, callback, token, body);
         }
 
+        protected void SendNotice(int noticeType, params object[] body)
+        {
+            Notice notice = new Notice(noticeType, body);
+            SendNotice(notice);
+        }
+
         protected void SendNotice(INotice notice)
         {
             if (_mediator != null)
