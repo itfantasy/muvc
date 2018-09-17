@@ -1,2 +1,2 @@
-# muvc
-Model-UnityView-Controller
+# umvc
+a Model-View-Controller frame for unity
