@@ -64,6 +64,15 @@ namespace itfantasy.umvc
             return this.gameObject.AddComponent<T>();
         }
 
+        protected void SendNotice(int noticeType, params object[] body)
+        {
+            Notice notice = new Notice(noticeType, body);
+            if (_command != null)
+            {
+                _command.Execute(notice);
+            }
+        }
+
         public virtual void HandleNotice(INotice notice) { }
 
         protected virtual void OnClick(GameObject go) { }

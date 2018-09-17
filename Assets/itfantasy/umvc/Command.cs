@@ -9,7 +9,7 @@ namespace itfantasy.umvc
     {
         public const int TryReactive = 9999;
 
-        Mediator _mediator;
+        protected Mediator _mediator;
 
         public bool isActive
         {
