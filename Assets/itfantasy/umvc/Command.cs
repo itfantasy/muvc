@@ -57,14 +57,16 @@ namespace itfantasy.umvc
         {
             if (_mediator != null)
             {
-                if (dispose)
-                {
-                    _mediator.Dispose();
-                }
-                else
-                {
-                    _mediator.gameObject.SetActive(false);
-                }
+                _mediator.OnClosing(() => {
+                    if (dispose)
+                    {
+                        _mediator.Dispose();
+                    }
+                    else
+                    {
+                        _mediator.gameObject.SetActive(false);
+                    }
+                });
             }
             _sceneName = "";
             _isRegisted = false;

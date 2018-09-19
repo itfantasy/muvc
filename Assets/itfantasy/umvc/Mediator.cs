@@ -39,11 +39,12 @@ namespace itfantasy.umvc
 
         void OnDisable()
         {
-            OnClosing();
+            OnClose();
         }
 
         void OnDestroy()
         {
+            OnClose();
             OnDispose();
         }
 
@@ -55,7 +56,9 @@ namespace itfantasy.umvc
             UpdateViewContent();
         }
 
-        protected virtual void OnClosing() { }
+        public virtual void OnClosing(Action callback) { callback.Invoke(); }
+
+        protected virtual void OnClose() { }
 
         protected virtual void OnDispose() { }
 
