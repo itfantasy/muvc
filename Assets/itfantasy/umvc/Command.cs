@@ -5,7 +5,7 @@ using System;
 
 namespace itfantasy.umvc
 {
-    public class Command
+    public class Command : IDisposable
     {
         public const int Command_Reactive = 9999;
 
@@ -47,7 +47,7 @@ namespace itfantasy.umvc
             }
         }
 
-        public object token;
+        public object token { get; set; }
 
         protected void RegisterMediator<T>(GameObject go) where T : Mediator
         {
@@ -110,6 +110,10 @@ namespace itfantasy.umvc
         }
 
         public virtual void Execute(INotice notice) { }
-        
+
+        public virtual void Dispose()
+        {
+            
+        }
     }
 }

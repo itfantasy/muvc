@@ -36,7 +36,7 @@ namespace itfantasy.umvc
             Facade.BroadNotice(noticeType, body);
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             _i = default(T);
         }
