@@ -8,7 +8,7 @@ namespace itfantasy.umvc
 {
     public class Facade
     {
-        #region --------------------> command管理
+        #region --------------------> command
 
         private static Dictionary<int, Command> _commandDictionary = new Dictionary<int, Command>();
 
@@ -38,7 +38,7 @@ namespace itfantasy.umvc
 
         #endregion
 
-        #region --------------------> notice机制
+        #region --------------------> notice
 
         public static void SendNotice(int cmdIndex, int noticeType, object[] body=null)
         {
@@ -73,7 +73,7 @@ namespace itfantasy.umvc
 
         #endregion
 
-        #region --------------------> proxy管理
+        #region --------------------> proxy
 
         private static List<IBaseProxy> _proxyList = new List<IBaseProxy>();
 
@@ -84,6 +84,54 @@ namespace itfantasy.umvc
                 _proxyList.Add(proxy);
             }
         }
+
+        #endregion
+
+        #region ------------------------> scene
+
+        private static string _curSceneName = "";
+
+        public static string curSceneName
+        {
+            get
+            {
+                if (_curSceneName == "")
+                {
+                    _curSceneName = SceneManager.GetActiveScene().name;
+                }
+                return _curSceneName;
+            }
+        }
+
+        private static void OnSceneChange(Scene scene, LoadSceneMode mode)
+        {
+            _curSceneName = scene.name;
+            foreach (Command cmd in _commandDictionary.Values)
+            {
+                if (cmd.sceneName == _curSceneName && cmd.isRegisted)
+                {
+                    cmd.Execute(new Notice(Command.Command_Reactive, null));
+                }
+            }
+
+            if (waitSceneName != "" &&
+                waitSceneName == _curSceneName &&
+                waitSceneChangeCallback != null)
+            {
+                waitSceneChangeCallback.Invoke();
+                waitSceneName = "";
+                waitSceneChangeCallback = null;
+            }
+        }
+
+        public static void WaitForSceneChangeOnce(string sceneName, Action callback)
+        {
+            waitSceneName = sceneName;
+            waitSceneChangeCallback = callback;
+        }
+
+        static string waitSceneName;
+        static Action waitSceneChangeCallback;
 
         #endregion
 
@@ -98,42 +146,5 @@ namespace itfantasy.umvc
             SceneManager.sceneLoaded += OnSceneChange;
         }
 
-        private static string _curSceneName;
-
-        public static string curSceneName
-        {
-            get
-            {
-                return _curSceneName;
-            }
-        }
-
-        public static void OnSceneChange(Scene scene, LoadSceneMode mode)
-        {
-            _curSceneName = scene.name;
-            foreach (Command cmd in _commandDictionary.Values)
-            {
-                if (cmd.sceneName == _curSceneName)
-                {
-                    cmd.Execute(new Notice(Command.TryReactive, null));
-                }
-            }
-
-            if (waitSceneName != "" &&
-                waitSceneName == _curSceneName &&
-                waitSceneChangeCallback != null)
-            {
-                waitSceneChangeCallback.Invoke();
-            }
-        }
-
-        public static void WaitForSceneChangeOnce(string sceneName, Action callback)
-        {
-            waitSceneName = sceneName;
-            waitSceneChangeCallback = callback;
-        }
-
-        static string waitSceneName;
-        static Action waitSceneChangeCallback;
     }
 }

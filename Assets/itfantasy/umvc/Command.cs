@@ -7,7 +7,7 @@ namespace itfantasy.umvc
 {
     public class Command
     {
-        public const int TryReactive = 9999;
+        public const int Command_Reactive = 9999;
 
         protected Mediator _mediator;
 
@@ -18,6 +18,14 @@ namespace itfantasy.umvc
                 return _mediator != null && 
                     _mediator.gameObject != null && 
                     _mediator.gameObject.activeSelf;
+            }
+        }
+
+        public bool isDispose
+        {
+            get
+            {
+                return _mediator == null || _mediator.gameObject == null;
             }
         }
 

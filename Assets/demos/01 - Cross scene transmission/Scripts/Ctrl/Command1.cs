@@ -16,15 +16,19 @@ public class Command1 : Command {
 
     public override void Execute(INotice notice)
     {
-        switch(notice.GetType())
+        switch (notice.GetType())
         {
             case Command1_Show:
                 GameObject root = GameObject.Find("UIRoot");
                 RegisterMediator<Mediator1>(root.transform.Find("Canvas1").gameObject);
                 break;
             case Command1_OK:
-                this.SendNotice(Index, Command1_Show);
-                this.SendNotice(notice);
+                Facade.WaitForSceneChangeOnce("Scene1", () =>
+                {
+                    this.SendNotice(Index, Command1_Show);
+                    this.SendNotice(notice);
+                });
+                SceneManager.LoadScene("Scene1");
                 break;
         }
         base.Execute(notice);
@@ -32,10 +36,6 @@ public class Command1 : Command {
 
     public void TransValueToScene2(string msg)
     {
-        Facade.WaitForSceneChangeOnce("Scene2", () =>
-        {
-            this.SendNotice(Command2.Index, Command2.Command2_OK, msg);
-        });
-        SceneManager.LoadScene("Scene2");
+        this.SendNotice(Command2.Index, Command2.Command2_OK, msg);   
     }
 }

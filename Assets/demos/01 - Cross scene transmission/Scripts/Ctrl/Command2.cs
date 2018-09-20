@@ -8,7 +8,8 @@ using itfantasy.umvc;
 /// 描述：
 /// 作者： 
 /// </summary>
-public class Command2 : Command {
+public class Command2 : Command
+{
 
     public const int Index = Worker_Ken.Index + 200;
     public const int Command2_Show = Index + 1;
@@ -23,8 +24,12 @@ public class Command2 : Command {
                 RegisterMediator<Mediator2>(root.transform.Find("Canvas2").gameObject);
                 break;
             case Command2_OK:
-                this.SendNotice(Index, Command2_Show);
-                this.SendNotice(notice);
+                Facade.WaitForSceneChangeOnce("Scene2", () =>
+                {
+                    this.SendNotice(Index, Command2_Show);
+                    this.SendNotice(notice);
+                });
+                SceneManager.LoadScene("Scene2");
                 break;
         }
         base.Execute(notice);
@@ -32,10 +37,6 @@ public class Command2 : Command {
 
     public void TransValueToScene1(string msg)
     {
-        Facade.WaitForSceneChangeOnce("Scene1", () =>
-        {
-            this.SendNotice(Command1.Index, Command1.Command1_OK, msg);
-        });
-        SceneManager.LoadScene("Scene1");
+       this.SendNotice(Command1.Index, Command1.Command1_OK, msg);
     }
 }
