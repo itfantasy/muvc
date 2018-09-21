@@ -35,9 +35,9 @@ public class AMainMediator : Mediator {
 
     protected override void OnClick(GameObject go)
     {
-        this.cmd.AsyncMainToSub((token) =>
+        this.cmd.AsyncMainToSub((notice) =>
         {
-            that.view.text.text = token.ToString();
+            that.view.text.text = notice.token.ToString();
         }, this.view.input.text);
         base.OnClick(go);
     }
@@ -45,5 +45,11 @@ public class AMainMediator : Mediator {
     public override void HandleNotice(INotice notice)
     {
         base.HandleNotice(notice);
+    }
+
+    protected override void OnDispose()
+    {
+        that = null;
+        base.OnDispose();
     }
 }

@@ -43,7 +43,7 @@ public class ASubMediator : Mediator {
         switch (notice.GetType())
         {
             case ASubCommand.Command_OK:
-                this.view.text.text = notice.GetToken().ToString();
+                this.view.text.text = notice.token.ToString();
                 this._notice = notice;
                 break;
         }

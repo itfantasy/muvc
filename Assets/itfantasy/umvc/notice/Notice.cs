@@ -11,8 +11,16 @@ namespace itfantasy.umvc
     {
         int _type;
         object[] _body;
-        Action<object> _callback;
+        Action<INotice> _callback;
         object _token;
+
+        public object token
+        {
+            get
+            {
+                return this._token;
+            }
+        }
 
         public object tag { get; set; }
 
@@ -48,19 +56,16 @@ namespace itfantasy.umvc
         {
             if (this._callback != null)
             {
-                this._callback.Invoke(this._token);
+                this._callback.Invoke(this);
+                this._callback = null;
             }
         }
 
-        public void SetCallback(Action<object> callback, object token)
+        public void SetCallback(Action<INotice> callback, object token)
         {
             this._callback = callback;
             this._token = token;
         }
 
-        public object GetToken()
-        {
-            return this._token;
-        }
     }
 }

@@ -49,7 +49,7 @@ namespace itfantasy.umvc
             }
         }
 
-        public static void SendAsyncNotice(int cmdIndex, int noticeType, Action<object> callback, object token, object[] body=null)
+        public static void SendAsyncNotice(int cmdIndex, int noticeType, Action<INotice> callback, object token, object[] body=null)
         {
             if (_commandDictionary.ContainsKey(cmdIndex))
             {
@@ -137,6 +137,10 @@ namespace itfantasy.umvc
 
         public static void InitMVC()
         {
+            foreach (Command command in _commandDictionary.Values)
+            {
+                command.Dispose();
+            }
             _commandDictionary.Clear();
             foreach (IBaseProxy proxy in _proxyList)
             {

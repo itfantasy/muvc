@@ -11,8 +11,9 @@ namespace itfantasy.umvc
         object[] GetBody();
         T GetBody<T>();
         void Finish();
-        void SetCallback(Action<object> callback, object token);
-        object GetToken();
+        void SetCallback(Action<INotice> callback, object token);
+        object token { get; }
+        object tag { get; set; }
     }
 }
 

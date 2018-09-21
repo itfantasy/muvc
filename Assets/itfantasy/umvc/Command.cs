@@ -85,7 +85,7 @@ namespace itfantasy.umvc
             Facade.SendNotice(cmdIndex, noticeType, body);
         }
 
-        protected void SendAsyncNotice(int cmdIndex, int noticeType, Action<object> callback, object token, params object[] body)
+        protected void SendAsyncNotice(int cmdIndex, int noticeType, Action<INotice> callback, object token, params object[] body)
         {
             Facade.SendAsyncNotice(cmdIndex, noticeType, callback, token, body);
         }

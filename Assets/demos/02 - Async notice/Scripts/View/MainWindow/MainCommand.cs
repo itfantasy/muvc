@@ -30,7 +30,7 @@ public class MainCommand : Command {
         base.Execute(notice);
     }
 
-    public void AsyncMainToSub(Action<object> callback, object token)
+    public void AsyncMainToSub(Action<INotice> callback, object token)
     {
         SendAsyncNotice(SubCommand.Index, SubCommand.SubCommand_OK, callback, token);
     }

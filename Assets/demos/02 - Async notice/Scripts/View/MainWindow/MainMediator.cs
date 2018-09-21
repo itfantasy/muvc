@@ -30,9 +30,9 @@ public class MainMediator : Mediator
 
     protected override void OnClick(GameObject go)
     {
-        this.cmd.AsyncMainToSub((token) =>
+        this.cmd.AsyncMainToSub((notice) =>
         {
-            this.view.text.text = token.ToString();
+            this.view.text.text = notice.token.ToString();
         }, this.view.input.text);
         base.OnClick(go);
     }

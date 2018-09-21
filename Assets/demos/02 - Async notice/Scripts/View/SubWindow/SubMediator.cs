@@ -41,7 +41,7 @@ public class SubMediator : Mediator
         switch(notice.GetType())
         {
             case SubCommand.SubCommand_OK:
-                this.view.text.text = notice.GetToken().ToString();
+                this.view.text.text = notice.token.ToString();
                 this._notice = notice;
                 break;
         }
