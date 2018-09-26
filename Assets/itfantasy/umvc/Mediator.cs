@@ -26,15 +26,11 @@ namespace itfantasy.umvc
         void Start()
         {
             SetEventListener();
-            OnShowing();
         }
 
         void OnEnable()
         {
-            if (inited)
-            {
-                OnShowing();
-            }
+            OnShowing();
         }
 
         void OnDisable()
