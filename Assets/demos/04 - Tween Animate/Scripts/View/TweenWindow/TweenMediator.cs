@@ -40,7 +40,7 @@ public class TweenMediator : Mediator {
         base.OnShowing();
     }
 
-    public override void OnClosing(Action callback)
+    protected override void OnClosing(Action callback)
     {
         iTween.ScaleTo(this.image.gameObject, Vector3.one * 0.6f, 0.7f);
         _callback = callback;

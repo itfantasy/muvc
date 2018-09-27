@@ -56,7 +56,7 @@ namespace itfantasy.umvc
                 _mediator = go.AddComponent<T>();
                 _mediator.SignCommand(this);
             }
-            _mediator.gameObject.SetActive(true);
+            _mediator.Show();
             _sceneName = Facade.curSceneName;
             _isRegisted = true;
         }
@@ -65,16 +65,7 @@ namespace itfantasy.umvc
         {
             if (_mediator != null)
             {
-                _mediator.OnClosing(() => {
-                    if (dispose)
-                    {
-                        _mediator.Dispose();
-                    }
-                    else
-                    {
-                        _mediator.gameObject.SetActive(false);
-                    }
-                });
+                _mediator.Close(dispose);
             }
             _sceneName = "";
             _isRegisted = false;

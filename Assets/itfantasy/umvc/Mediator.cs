@@ -6,8 +6,8 @@ namespace itfantasy.umvc
 {
     public class Mediator : MonoBehaviour, IDisposable
     {
-        bool inited = false;
         protected Command _command = null;
+        protected Mediator _parent = null;
 
         public object token { get; set; }
 
@@ -16,10 +16,14 @@ namespace itfantasy.umvc
             this._command = command;
         }
 
+        public void SignParent(Mediator parent)
+        {
+            this._parent = parent;
+        }
+
         void Awake()
         {
             OnInitialize();
-            inited = true;
         }
 
         // Use this for initialization
@@ -52,7 +56,7 @@ namespace itfantasy.umvc
             UpdateViewContent();
         }
 
-        public virtual void OnClosing(Action callback) { callback.Invoke(); }
+        protected virtual void OnClosing(Action callback) { callback.Invoke(); }
 
         protected virtual void OnClose() { }
 
@@ -61,6 +65,26 @@ namespace itfantasy.umvc
         protected T AttachView<T>() where T : View
         {
             return this.gameObject.AddComponent<T>();
+        }
+
+        protected T AttachSubMediator<T>(GameObject go) where T : Mediator
+        {
+            T mediator = go.AddComponent<T>();
+            mediator.SignCommand(_command);
+            mediator.SignParent(this);
+            return mediator;
+        }
+
+        protected T AttachSubMediator<T>(Transform child) where T : Mediator
+        {
+            GameObject go = child.gameObject;
+            return AttachSubMediator<T>(go);
+        }
+
+        protected T AttachSubMediator<T>(string name) where T : Mediator
+        {
+            GameObject go = transform.Find(name).gameObject;
+            return AttachSubMediator<T>(go);
         }
 
         protected void SendNotice(int noticeType, params object[] body)
@@ -79,6 +103,26 @@ namespace itfantasy.umvc
         protected virtual void SetEventListener() { }
 
         protected virtual void UpdateViewContent() { }
+
+        public virtual void Show()
+        {
+            this.gameObject.SetActive(true);
+        }
+
+        public virtual void Close(bool dispose=false)
+        {
+            this.OnClosing(() =>
+            {
+                if (dispose)
+                {
+                    this.Dispose();
+                }
+                else
+                {
+                    this.gameObject.SetActive(false);
+                }
+            });
+        }
 
         public virtual void Dispose() 
         {
