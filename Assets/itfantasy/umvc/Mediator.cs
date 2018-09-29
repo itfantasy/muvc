@@ -9,11 +9,14 @@ namespace itfantasy.umvc
         protected Command _command = null;
         protected Mediator _parent = null;
 
+        private bool _monitoring = false;
+
         public object token { get; set; }
 
-        public void SignCommand(Command command)
+        public void SignCommand(Command command, bool monitor=false)
         {
             this._command = command;
+            this._monitoring = monitor;
         }
 
         public void SignParent(Mediator parent)
@@ -44,23 +47,27 @@ namespace itfantasy.umvc
 
         void OnDestroy()
         {
-            OnClose();
             OnDispose();
         }
 
         protected virtual void OnInitialize() {
-            
+            SendMonitoringNotice(Command.Monitor_Inited);
         }
 
         protected virtual void OnShowing() {
             UpdateViewContent();
+            SendMonitoringNotice(Command.Monitor_Showed);
         }
 
         protected virtual void OnClosing(Action callback) { callback.Invoke(); }
 
-        protected virtual void OnClose() { }
+        protected virtual void OnClose() {
+            SendMonitoringNotice(Command.Monitor_Closed);
+        }
 
-        protected virtual void OnDispose() { }
+        protected virtual void OnDispose() {
+            SendMonitoringNotice(Command.Monitor_Disposed);
+        }
 
         protected T AttachView<T>() where T : View
         {
@@ -96,6 +103,14 @@ namespace itfantasy.umvc
             }
         }
 
+        private void SendMonitoringNotice(int noticeType)
+        {
+            if(this._monitoring)
+            {
+                Facade.SystemNotice(noticeType, this.name);
+            }
+        }
+
         public virtual void HandleNotice(INotice notice) { }
 
         protected virtual void OnClick(GameObject go) { }
@@ -109,7 +124,7 @@ namespace itfantasy.umvc
             this.gameObject.SetActive(true);
         }
 
-        public virtual void Close(bool dispose=false)
+        public virtual void Close(bool dispose = false)
         {
             this.OnClosing(() =>
             {
@@ -128,6 +143,6 @@ namespace itfantasy.umvc
         {
             Destroy(this.gameObject);
         }
-        
+
     }
 }

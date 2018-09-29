@@ -10,7 +10,6 @@ using itfantasy.umvc;
 public class ComCommand : Command {
 
     public const int Index = Worker_Tifa.Index + 100;
-    public const int Command_Show = Index + 1;
 
     public override void Execute(INotice notice)
     {

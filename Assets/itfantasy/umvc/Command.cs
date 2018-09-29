@@ -7,7 +7,17 @@ namespace itfantasy.umvc
 {
     public class Command : IDisposable
     {
-        public const int Command_Reactive = 9999;
+        public const int Monitor_Inited = 101;
+        public const int Monitor_Showed = 102;
+        public const int Monitor_Closed = 103;
+        public const int Monitor_Disposed = 104;
+        
+        public const int Command_Reactive = 1001;
+        public const int Command_Show = 1002;
+        public const int Command_Close = 1003;
+        public const int Command_OK = 1004;
+        public const int Command_Trigger = 1005;
+        public const int Command_Cancel = 1006;
 
         protected Mediator _mediator;
 
@@ -49,12 +59,16 @@ namespace itfantasy.umvc
 
         public object token { get; set; }
 
-        protected void RegisterMediator<T>(GameObject go) where T : Mediator
+        protected void RegisterMediator<T>(GameObject go, bool monitor=true) where T : Mediator
         {
             if (_mediator == null)
             {
-                _mediator = go.AddComponent<T>();
-                _mediator.SignCommand(this);
+                _mediator = go.GetComponent<T>();
+                if (_mediator == null)
+                {
+                    _mediator = go.AddComponent<T>();
+                }
+                _mediator.SignCommand(this, monitor);
             }
             _mediator.Show();
             _sceneName = Facade.curSceneName;

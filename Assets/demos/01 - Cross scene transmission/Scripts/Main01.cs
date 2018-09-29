@@ -9,10 +9,15 @@ using itfantasy.umvc;
 /// </summary>
 public class Main01 : MonoBehaviour {
 
+    static bool _inited = false;
+
 	// Use this for initialization
 	void Start () {
-        Facade.InitMVC();
-        Worker_Ken.RegisterCommands();
+        if (!_inited) {
+            Facade.InitMVC();
+            Worker_Ken.RegisterCommands();
+            _inited = true;
+        }
 	}
 	
 }

@@ -10,8 +10,6 @@ using itfantasy.umvc;
 public class TweenCommand : Command {
 
     public const int Index = Worker_Tifa.Index + 200;
-    public const int Command_Show = Index + 1;
-    public const int Command_Close = Index + 2;
 
     public override void Execute(INotice notice)
     {

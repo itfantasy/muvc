@@ -11,8 +11,6 @@ using itfantasy.umvc;
 public class AMainCommand : Command {
 
     public const int Index = Worker_Noctis.Index + 100;
-    public const int Command_Show = Index + 1;
-    public const int Command_Close = Index + 2;
 
     public override void Execute(INotice notice)
     {

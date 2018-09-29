@@ -6,20 +6,22 @@ namespace itfantasy.umvc
 {
     public class Proxy<T> : IBaseProxy where T : IBaseProxy, new()
     {
-        private static T _i;
+        private static T _ins;
 
-        public static T i
+        public static T ins
         {
             get
             {
-                if (_i == null)
+                if (_ins == null)
                 {
-                    _i = new T();
-                    Facade.RegisterProxy(_i);
+                    _ins = new T();
+                    Facade.RegisterProxy(_ins);
                 }
-                return _i;
+                return _ins;
             }
         }
+
+
 
         public void SendNotice(int cmdIndex, int noticeType, params object[] body)
         {
@@ -38,7 +40,7 @@ namespace itfantasy.umvc
 
         public virtual void Dispose()
         {
-            _i = default(T);
+            _ins = default(T);
         }
     }
 

@@ -46,4 +46,14 @@ public class Mediator1 : Mediator {
         }
         base.HandleNotice(notice);
     }
+
+    protected override void OnClose()
+    {
+        base.OnClose();
+    }
+
+    protected override void OnDispose()
+    {
+        base.OnDispose();
+    }
 }

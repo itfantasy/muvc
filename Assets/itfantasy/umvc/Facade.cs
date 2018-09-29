@@ -44,8 +44,9 @@ namespace itfantasy.umvc
         {
             if (_commandDictionary.ContainsKey(cmdIndex))
             {
+                Command command = _commandDictionary[cmdIndex];
                 Notice notice = new Notice(noticeType, body);
-                _commandDictionary[cmdIndex].Execute(notice);
+                command.Execute(notice);
             }
         }
 
@@ -69,6 +70,17 @@ namespace itfantasy.umvc
                     cmd.Execute(notice);
                 }
             }
+        }
+
+        #endregion
+
+        #region -------------------------> system notice
+
+        public const int SystemIndex = 0;
+
+        public static void SystemNotice(int noticeType, params object[] body)
+        {
+            SendNotice(SystemIndex, noticeType, body);
         }
 
         #endregion
