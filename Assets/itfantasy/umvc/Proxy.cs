@@ -21,7 +21,18 @@ namespace itfantasy.umvc
             }
         }
 
-
+        private string _name = "";
+        public string NAME
+        {
+            get
+            {
+                if(_name == "")
+                {
+                    _name = typeof(T).Name;
+                }
+                return _name;
+            }
+        }
 
         public void SendNotice(int cmdIndex, int noticeType, params object[] body)
         {

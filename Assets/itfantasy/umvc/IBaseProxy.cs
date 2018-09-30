@@ -7,6 +7,6 @@ namespace itfantasy.umvc
 {
     public interface IBaseProxy : IDisposable
     {
-        
+        string NAME { get; }
     }
 }
