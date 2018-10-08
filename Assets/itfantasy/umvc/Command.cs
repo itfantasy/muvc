@@ -7,10 +7,14 @@ namespace itfantasy.umvc
 {
     public class Command : IDisposable
     {
+        public const int SystemIndex = 0;
+
         public const int Monitor_Inited = 101;
         public const int Monitor_Showed = 102;
         public const int Monitor_Closed = 103;
         public const int Monitor_Disposed = 104;
+
+        public const int System_SceneChange = 201;
         
         public const int Command_Reactive = 1001;
         public const int Command_Show = 1002;

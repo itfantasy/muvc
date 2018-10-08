@@ -13,7 +13,7 @@ public class PreACommand : Command {
 
     public override void Execute(INotice notice)
     {
-        switch(notice.GetType())
+        switch (notice.GetType())
         {
             case Command_Show:
                 GameObject root = GameObject.Find("UIRoot");

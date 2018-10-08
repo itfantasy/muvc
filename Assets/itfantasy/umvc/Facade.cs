@@ -76,11 +76,9 @@ namespace itfantasy.umvc
 
         #region -------------------------> system notice
 
-        public const int SystemIndex = 0;
-
         public static void SystemNotice(int noticeType, params object[] body)
         {
-            SendNotice(SystemIndex, noticeType, body);
+            SendNotice(Command.SystemIndex, noticeType, body);
         }
 
         #endregion
@@ -118,6 +116,8 @@ namespace itfantasy.umvc
         private static void OnSceneChange(Scene scene, LoadSceneMode mode)
         {
             _curSceneName = scene.name;
+            SystemNotice(Command.System_SceneChange, _curSceneName);
+
             foreach (Command cmd in _commandDictionary.Values)
             {
                 if (cmd.sceneName == _curSceneName && cmd.isRegisted)

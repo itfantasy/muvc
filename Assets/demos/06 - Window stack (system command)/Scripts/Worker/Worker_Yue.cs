@@ -13,7 +13,7 @@ public class Worker_Yue {
 
     public static void RegisterCommands()
     {
-        Facade.RegisterCommand(Facade.SystemIndex, new SystemCommand());
+        Facade.RegisterCommand(Command.SystemIndex, new SystemCommand());
         Facade.RegisterCommand(PreACommand.Index, new PreACommand());
         Facade.RegisterCommand(PreBCommand.Index, new PreBCommand());
         Facade.RegisterCommand(PreCCommand.Index, new PreCCommand());
