@@ -69,9 +69,19 @@ namespace itfantasy.umvc
             SendMonitoringNotice(Command.Monitor_Disposed);
         }
 
+        protected T AttachComponent<T>() where T : Component
+        {
+            T comp = this.gameObject.GetComponent<T>();
+            if (comp == null)
+            {
+                comp = this.gameObject.AddComponent<T>();
+            }
+            return comp;
+        }
+
         protected T AttachView<T>() where T : View
         {
-            return this.gameObject.AddComponent<T>();
+            return this.AttachComponent<T>();
         }
 
         protected T AttachSubMediator<T>(GameObject go) where T : Mediator
