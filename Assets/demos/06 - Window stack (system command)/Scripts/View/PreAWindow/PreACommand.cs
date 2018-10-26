@@ -22,6 +22,9 @@ public class PreACommand : Command {
             case Command_Close:
                 RemoveMediator();
                 break;
+            case Command_OK:
+                SendNotice(PreBCommand.Index, Command_Show);
+                break;
         }
         base.Execute(notice);
     }

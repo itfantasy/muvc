@@ -76,7 +76,7 @@ namespace itfantasy.umvc
 
         #region -------------------------> system notice
 
-        public static void SystemNotice(int noticeType, params object[] body)
+        public static void SystemNotice(int noticeType, object[] body)
         {
             SendNotice(Command.SystemIndex, noticeType, body);
         }
@@ -113,10 +113,62 @@ namespace itfantasy.umvc
             }
         }
 
+        private static Dictionary<string, List<AsyncArg>> _sceneCallbacks
+            = new Dictionary<string, List<AsyncArg>>();
+
+        public static LoadSceneBehaviour loadSceneBehaviour { get; set; }
+
+        private static void DealSceneChangeCallbacks(string sceneName)
+        {
+            if (_sceneCallbacks.ContainsKey(_curSceneName))
+            {
+                List<AsyncArg> args = _sceneCallbacks[_curSceneName];
+                foreach (AsyncArg arg in args)
+                {
+                    arg.callback.Invoke(arg.token);
+                }
+                args.Clear();
+                _sceneCallbacks.Remove(_curSceneName);
+            }
+        }
+
+        public static void AddSceneChangeCallback(string sceneName, Action<object> callback, object token = null)
+        {
+            if (!_sceneCallbacks.ContainsKey(sceneName))
+            {
+                _sceneCallbacks[sceneName] = new List<AsyncArg>();
+            }
+            _sceneCallbacks[sceneName].Add(new AsyncArg(callback, token));
+        }
+
+        public static void ChangeScene(string sceneName, Action<object> callback = null, object token = null)
+        {
+            if (callback != null)
+            {
+                AddSceneChangeCallback(sceneName, callback, token);
+            }
+
+            if (sceneName == _curSceneName)
+            {
+                DealSceneChangeCallbacks(sceneName);
+            }
+            else
+            {
+                if (loadSceneBehaviour != null)
+                {
+                    loadSceneBehaviour.Invoke(sceneName);
+                }
+                else
+                {
+                    SceneManager.LoadScene(sceneName);
+                }
+            }
+        }
+
         private static void OnSceneChange(Scene scene, LoadSceneMode mode)
         {
             _curSceneName = scene.name;
-            SystemNotice(Command.System_SceneChange, _curSceneName);
+            SystemNotice(Command.System_SceneChange, new object[] { _curSceneName });
 
             foreach (Command cmd in _commandDictionary.Values)
             {
@@ -126,24 +178,8 @@ namespace itfantasy.umvc
                 }
             }
 
-            if (waitSceneName != "" &&
-                waitSceneName == _curSceneName &&
-                waitSceneChangeCallback != null)
-            {
-                waitSceneChangeCallback.Invoke();
-                waitSceneName = "";
-                waitSceneChangeCallback = null;
-            }
+            DealSceneChangeCallbacks(_curSceneName);
         }
-
-        public static void WaitForSceneChangeOnce(string sceneName, Action callback)
-        {
-            waitSceneName = sceneName;
-            waitSceneChangeCallback = callback;
-        }
-
-        static string waitSceneName;
-        static Action waitSceneChangeCallback;
 
         #endregion
 
@@ -159,8 +195,23 @@ namespace itfantasy.umvc
                 proxy.Dispose();
             }
             _proxyList.Clear();
+            SceneManager.sceneLoaded -= OnSceneChange;
             SceneManager.sceneLoaded += OnSceneChange;
         }
 
     }
+
+    public class AsyncArg
+    {
+        public Action<object> callback;
+        public object token;
+
+        public AsyncArg(Action<object> callback, object token)
+        {
+            this.callback = callback;
+            this.token = token;
+        }
+    }
+
+    public delegate void LoadSceneBehaviour(string sceneName);
 }

@@ -13,6 +13,7 @@ namespace itfantasy.umvc
         public const int Monitor_Showed = 102;
         public const int Monitor_Closed = 103;
         public const int Monitor_Disposed = 104;
+        public const int Monitor_Clicked = 105;
 
         public const int System_SceneChange = 201;
         
@@ -63,7 +64,7 @@ namespace itfantasy.umvc
 
         public object token { get; set; }
 
-        protected void RegisterMediator<T>(GameObject go, bool monitor=true) where T : Mediator
+        protected T RegisterMediator<T>(GameObject go, bool monitor=true) where T : Mediator
         {
             if (_mediator == null)
             {
@@ -77,6 +78,7 @@ namespace itfantasy.umvc
             _mediator.Show();
             _sceneName = Facade.curSceneName;
             _isRegisted = true;
+            return _mediator as T;
         }
 
         protected void RemoveMediator(bool dispose=false)

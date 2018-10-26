@@ -10,10 +10,11 @@ namespace itfantasy.umvc
         protected Mediator _parent = null;
 
         private bool _monitoring = false;
+        private bool _inited = false;
 
         public object token { get; set; }
 
-        public void SignCommand(Command command, bool monitor=false)
+        public void SignCommand(Command command, bool monitor = false)
         {
             this._command = command;
             this._monitoring = monitor;
@@ -33,11 +34,17 @@ namespace itfantasy.umvc
         void Start()
         {
             SetEventListener();
+            UpdateViewContent();
+            _inited = true;
         }
 
         void OnEnable()
         {
             OnShowing();
+            if (_inited)
+            {
+                UpdateViewContent();
+            }
         }
 
         void OnDisable()
@@ -50,23 +57,26 @@ namespace itfantasy.umvc
             OnDispose();
         }
 
-        protected virtual void OnInitialize() {
-            SendMonitoringNotice(Command.Monitor_Inited);
+        protected virtual void OnInitialize()
+        {
+            SendMonitoringNotice(Command.Monitor_Inited, this.name);
         }
 
-        protected virtual void OnShowing() {
-            UpdateViewContent();
-            SendMonitoringNotice(Command.Monitor_Showed);
+        protected virtual void OnShowing()
+        {
+            SendMonitoringNotice(Command.Monitor_Showed, this.name);
         }
 
         protected virtual void OnClosing(Action callback) { callback.Invoke(); }
 
-        protected virtual void OnClose() {
-            SendMonitoringNotice(Command.Monitor_Closed);
+        protected virtual void OnClose()
+        {
+            SendMonitoringNotice(Command.Monitor_Closed, this.name);
         }
 
-        protected virtual void OnDispose() {
-            SendMonitoringNotice(Command.Monitor_Disposed);
+        protected virtual void OnDispose()
+        {
+            SendMonitoringNotice(Command.Monitor_Disposed, this.name);
         }
 
         protected T AttachComponent<T>() where T : Component
@@ -113,17 +123,20 @@ namespace itfantasy.umvc
             }
         }
 
-        private void SendMonitoringNotice(int noticeType)
+        private void SendMonitoringNotice(int noticeType, params object[] body)
         {
-            if(this._monitoring)
+            if (this._monitoring)
             {
-                Facade.SystemNotice(noticeType, this.name);
+                Facade.SystemNotice(noticeType, body);
             }
         }
 
         public virtual void HandleNotice(INotice notice) { }
 
-        protected virtual void OnClick(GameObject go) { }
+        protected virtual void OnClick(GameObject go)
+        {
+            SendMonitoringNotice(Command.Monitor_Clicked, this.name, go.name);
+        }
 
         protected virtual void SetEventListener() { }
 
@@ -149,7 +162,7 @@ namespace itfantasy.umvc
             });
         }
 
-        public virtual void Dispose() 
+        public virtual void Dispose()
         {
             Destroy(this.gameObject);
         }

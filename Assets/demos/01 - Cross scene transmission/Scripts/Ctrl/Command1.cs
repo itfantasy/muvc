@@ -23,12 +23,11 @@ public class Command1 : Command {
                 RegisterMediator<Mediator1>(root.transform.Find("Canvas1").gameObject);
                 break;
             case Command1_OK:
-                Facade.WaitForSceneChangeOnce("Scene1", () =>
+                Facade.ChangeScene("Scene1", (token) =>
                 {
                     this.SendNotice(Index, Command1_Show);
                     this.SendNotice(notice);
                 });
-                SceneManager.LoadScene("Scene1");
                 break;
         }
         base.Execute(notice);

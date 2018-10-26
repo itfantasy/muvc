@@ -13,7 +13,6 @@ public class Main06 : MonoBehaviour {
 	void Start () {
         Facade.InitMVC();
         Worker_Yue.RegisterCommands();
-
         WindowStack.ins.PopAndSend();
 	}
 	

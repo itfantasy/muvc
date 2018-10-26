@@ -47,6 +47,11 @@ public class TweenMediator : Mediator {
         Invoke("DelayClose", 0.4f);
     }
 
+    public void HandleValue(string val)
+    {
+
+    }
+
     Action _callback;
 
     void DelayClose()

@@ -24,12 +24,11 @@ public class ASubCommand : Command {
                 RemoveMediator();
                 break;
             case Command_OK:
-                Facade.WaitForSceneChangeOnce("ASubScene", () =>
+                Facade.ChangeScene("ASubScene", (token) =>
                 {
                     SendNotice(Index, Command_Show);
                     SendNotice(notice);
                 });
-                SceneManager.LoadScene("ASubScene");
                 break;
         }
         base.Execute(notice);
@@ -38,13 +37,12 @@ public class ASubCommand : Command {
     public void FinishNotice(INotice notice)
     {
         this.SendNotice(Index, Command_Close);
-        Facade.WaitForSceneChangeOnce("AMainScene", () =>
+        Facade.ChangeScene("AMainScene", (token) =>
         {
             if (notice != null)
             {
                 notice.Finish();
             }
         });
-        SceneManager.LoadScene("AMainScene");
     }
 }

@@ -35,4 +35,9 @@ public class MapModule : MonoBehaviour, IMapModule
     {
         return heroSprite.position;
     }
+
+    public Vector2 GetPos()
+    {
+        return Vector2.zero;
+    }
 }

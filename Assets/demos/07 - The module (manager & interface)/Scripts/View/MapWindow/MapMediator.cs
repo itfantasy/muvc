@@ -9,9 +9,11 @@ using itfantasy.umvc;
 /// </summary>
 public class MapMediator : Mediator {
 
+    MapModule module;
+
     protected override void OnInitialize()
     {
-        AttachComponent<MapModule>();
+        this.module = AttachComponent<MapModule>();
         base.OnInitialize();
     }
 
