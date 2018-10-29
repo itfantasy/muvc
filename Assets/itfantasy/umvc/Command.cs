@@ -91,6 +91,14 @@ namespace itfantasy.umvc
             _isRegisted = false;
         }
 
+        protected void UpdateMediator()
+        {
+            if (_mediator != null)
+            {
+                _mediator.UpdateViewContent();
+            }
+        }
+
         protected void SendNotice(int cmdIndex, int noticeType, params object[] body)
         {
             Facade.SendNotice(cmdIndex, noticeType, body);

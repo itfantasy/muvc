@@ -140,7 +140,7 @@ namespace itfantasy.umvc
 
         protected virtual void SetEventListener() { }
 
-        protected virtual void UpdateViewContent() { }
+        public virtual void UpdateViewContent() { }
 
         public virtual void Show()
         {
