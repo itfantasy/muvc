@@ -45,14 +45,16 @@ namespace itfantasy.umvc
             }
         }
 
-        private bool _isRegisted;
+        private bool _registed;
         public bool isRegisted
         {
             get
             {
-                return _isRegisted;
+                return _registed;
             }
         }
+
+        public bool isSystem { get; set; }
 
         private string _sceneName;
         public string sceneName
@@ -78,7 +80,7 @@ namespace itfantasy.umvc
             }
             _mediator.Show();
             _sceneName = Facade.curSceneName;
-            _isRegisted = true;
+            _registed = true;
             return _mediator as T;
         }
 
@@ -89,7 +91,7 @@ namespace itfantasy.umvc
                 _mediator.Close(dispose);
             }
             _sceneName = "";
-            _isRegisted = false;
+            _registed = false;
         }
 
         protected void UpdateMediator()

@@ -12,10 +12,11 @@ namespace itfantasy.umvc
 
         private static Dictionary<int, Command> _commandDictionary = new Dictionary<int, Command>();
 
-        public static void RegisterCommand(int index, Command command)
+        public static void RegisterCommand(int index, Command command, bool system=false)
         {
             if (!_commandDictionary.ContainsKey(index))
             {
+                command.isSystem = system;
                 _commandDictionary.Add(index, command);
             }
             else
@@ -177,10 +178,14 @@ namespace itfantasy.umvc
         private static void OnSceneChange(Scene scene, LoadSceneMode mode)
         {
             _curSceneName = scene.name;
-            SystemNotice(Command.System_SceneChange, new object[] { _curSceneName });
 
             foreach (Command cmd in _commandDictionary.Values)
             {
+                if (cmd.isSystem)
+                {
+                    cmd.Execute(new Notice(Command.System_SceneChange, new object[] { _curSceneName }));
+                }
+
                 if (cmd.sceneName == _curSceneName && cmd.isRegisted)
                 {
                     cmd.Execute(new Notice(Command.Command_Reactive, null));
