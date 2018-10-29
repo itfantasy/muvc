@@ -49,6 +49,11 @@ namespace itfantasy.umvc
             Facade.BroadNotice(noticeType, body);
         }
 
+        protected void PushNotice(int cmdIndex, int noticeType, params object[] body)
+        {
+            Facade.PushNotice(cmdIndex, noticeType, body);
+        }
+
         public virtual void Dispose()
         {
             _ins = default(T);

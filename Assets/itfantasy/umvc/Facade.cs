@@ -72,6 +72,15 @@ namespace itfantasy.umvc
             }
         }
 
+        public static void PushNotice(int cmdIndex, int noticeType, object[] body=null)
+        {
+            if (_commandDictionary.ContainsKey(cmdIndex))
+            {
+                Notice notice = new Notice(noticeType, body);
+                _commandDictionary[cmdIndex].InsertNotice(notice);
+            }
+        }
+
         #endregion
 
         #region -------------------------> system notice

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 
 namespace itfantasy.umvc
@@ -128,11 +129,46 @@ namespace itfantasy.umvc
             Facade.BroadNotice(noticeType, body);
         }
 
+        private List<INotice> _noticeList = new List<INotice>();
+
+        public void InsertNotice(INotice notice)
+        {
+            _noticeList.Add(notice);
+        }
+
+        protected void PushNotice(int cmdIndex, int noticeType, params object[] body)
+        {
+            Facade.PushNotice(cmdIndex, noticeType, body);
+        }
+
+        protected bool PopNotice(int noticeType=0)
+        {
+            if (_noticeList.Count > 0)
+            {
+                INotice target = null;
+                foreach (INotice notice in _noticeList)
+                {
+                    if (notice.GetType() == noticeType || noticeType == 0)
+                    {
+                        target = notice;
+                        break;
+                    }
+                }
+                if (target != null)
+                {
+                    _noticeList.Remove(target);
+                    Execute(target);
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public virtual void Execute(INotice notice) { }
 
         public virtual void Dispose()
         {
-            
+            _noticeList.Clear();
         }
     }
 }
