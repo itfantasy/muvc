@@ -56,12 +56,12 @@ namespace itfantasy.umvc.Editor
                     continue;
                 }
                 fileName = fileName.Replace(".txt", "");
-                string saveName = fileName.Replace("template", name);
+                string saveName = fileName.Replace("Template", name);
                 string content = FileIOUtil.ReadFile(fileInfo.FullName);
                 string saveContent = content.Replace("##NAME##", name);
-                string savePath = Application.dataPath + "/" + config.codeSavePath + "/" + saveName;
-                FileIOUtil.CreateFile(savePath, saveContent);
-                Debug.Log("[GenerateCode]:: " + config.codeSavePath + "/" + saveName);
+                string savePath = "/" + config.codeSavePath + "/" + name + "/" + saveName;
+                FileIOUtil.CreateFile(Application.dataPath + savePath, saveContent);
+                Debug.Log("[GenerateCode]:: " + savePath);
             }
 
             AssetDatabase.Refresh();
