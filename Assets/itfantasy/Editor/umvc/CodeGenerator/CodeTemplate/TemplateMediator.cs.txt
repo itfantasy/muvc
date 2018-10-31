@@ -1,0 +1,102 @@
+﻿using UnityEngine;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using itfantasy.umvc;
+
+// using ##NAME##Vo = YourLogicVo;
+
+public class ##NAME##Mediator : Mediator
+{
+    ##NAME##Command command
+    {
+        get
+        {
+            return this._command as ##NAME##Command;
+        }
+    }
+
+    ##NAME##Vo _viewObj;
+
+    public ##NAME##Vo viewObj
+    {
+        get
+        {
+            return this._viewObj;
+        }
+    }
+
+    static ##NAME##Mediator that;
+
+    protected override void OnInitialize()
+    {
+        that = this;
+        base.OnInitialize();
+    }
+
+    public void SetViewObj(##NAME##Vo vo)
+    {
+        this._viewObj = vo;
+    }
+
+    private void SaveViewObj()
+    {
+        this._command.token = this._viewObj;
+    }
+
+    private void LoadViewObj()
+    {
+        this._viewObj = this._command.token as ##NAME##Vo;
+    }
+
+    public override void UpdateViewContent()
+    {
+        if (this._viewObj == null)
+        {
+            LoadViewObj();
+        }
+
+
+
+        base.UpdateViewContent();
+    }
+
+    protected override void SetEventListener()
+    {
+
+        base.SetEventListener();
+    }
+
+    protected override void OnClick(GameObject go)
+    {
+
+        base.OnClick(go);
+    }
+
+    public override void HandleNotice(INotice notice)
+    {
+        switch (notice.GetType())
+        {
+            case Command.Command_Show:
+                ##NAME##Vo vo = notice.GetBody<##NAME##Vo>();
+                SetViewObj(vo);
+                break;
+
+        }
+        base.HandleNotice(notice);
+    }
+
+    protected override void OnDispose()
+    {
+		SaveViewObj();
+        that = null;
+        base.OnDispose();
+    }
+}
+
+public class ##NAME##Vo
+{
+
+}
+

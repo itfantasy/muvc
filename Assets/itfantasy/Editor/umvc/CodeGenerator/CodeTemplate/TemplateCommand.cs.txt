@@ -1,0 +1,37 @@
+﻿using UnityEngine;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using itfantasy.umvc;
+
+public class ##NAME##Command : Command
+{
+    ##NAME##Mediator mediator;
+
+    public override void Execute(INotice notice)
+    {
+        switch(notice.GetType())
+        {
+            case Command_Show:
+                GameObject go = null;
+
+                this.mediator = RegisterMediator<##NAME##Mediator>(go);
+                break;
+            case Command_Close:
+                RemoveMediator();
+                break;
+
+            case Command_Reactive:
+                GameObject rego = null; // must use a sync func to load the rego
+
+                this.mediator = RegisterMediator<##NAME##Mediator>(rego);
+                break;
+
+
+
+        }
+        base.Execute(notice);
+    }
+}
+
