@@ -26,7 +26,7 @@ public class Command1 : Command {
                 Facade.ChangeScene("Scene1", (token) =>
                 {
                     this.SendNotice(Index, Command1_Show);
-                    this.SendNotice(notice);
+                    this.SendToMediator(notice);
                 });
                 break;
         }

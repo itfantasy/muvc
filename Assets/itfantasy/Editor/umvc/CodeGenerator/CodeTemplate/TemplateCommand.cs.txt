@@ -17,6 +17,7 @@ public class ##NAME##Command : Command
                 GameObject go = null;
 
                 this.mediator = RegisterMediator<##NAME##Mediator>(go);
+				this.SendToMediator(notice);
                 break;
             case Command_Close:
                 RemoveMediator();

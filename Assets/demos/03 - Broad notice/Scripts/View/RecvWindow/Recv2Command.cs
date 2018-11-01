@@ -19,7 +19,7 @@ class Recv2Command : Command
                 RegisterMediator<RecvMediator>(root.transform.Find("Recv2Window").gameObject);
                 break;
             case Worker_Cloud.Broad_AddValue:
-                SendNotice(notice);
+                SendToMediator(notice);
                 break;
         }
         base.Execute(notice);

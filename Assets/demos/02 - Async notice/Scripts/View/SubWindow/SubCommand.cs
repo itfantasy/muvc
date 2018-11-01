@@ -27,7 +27,7 @@ public class SubCommand : Command {
                 break;
             case SubCommand_OK:
                 SendNotice(Index, SubCommand_Show);
-                SendNotice(notice);
+                SendToMediator(notice);
                 break;
         }
         base.Execute(notice);

@@ -27,7 +27,7 @@ public class ASubCommand : Command {
                 Facade.ChangeScene("ASubScene", (token) =>
                 {
                     SendNotice(Index, Command_Show);
-                    SendNotice(notice);
+                    SendToMediator(notice);
                 });
                 break;
         }
