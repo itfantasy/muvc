@@ -17,6 +17,10 @@ namespace itfantasy.umvc
             if (!_commandDictionary.ContainsKey(index))
             {
                 command.isSystem = system;
+                if (index == Command.SystemIndex)
+                {
+                    command.isSystem = true;
+                }
                 _commandDictionary.Add(index, command);
             }
             else
@@ -110,6 +114,7 @@ namespace itfantasy.umvc
         #region ------------------------> scene
 
         private static string _curSceneName = "";
+        private static string _lstSceneName = "";
 
         public static string curSceneName
         {
@@ -164,6 +169,14 @@ namespace itfantasy.umvc
             }
             else
             {
+                foreach (Command cmd in _commandDictionary.Values)
+                {
+                    if (cmd.isSystem)
+                    {
+                        cmd.Execute(new Notice(Command.System_SceneLeave, new object[] { _curSceneName, sceneName }));
+                    }
+                }
+
                 if (loadSceneBehaviour != null)
                 {
                     loadSceneBehaviour.Invoke(sceneName);
@@ -177,18 +190,27 @@ namespace itfantasy.umvc
 
         private static void OnSceneChange(Scene scene, LoadSceneMode mode)
         {
+            _lstSceneName = _curSceneName;
             _curSceneName = scene.name;
 
             foreach (Command cmd in _commandDictionary.Values)
             {
                 if (cmd.isSystem)
                 {
-                    cmd.Execute(new Notice(Command.System_SceneChange, new object[] { _curSceneName }));
+                    cmd.Execute(new Notice(Command.System_SceneEnter, new object[] { _curSceneName, _lstSceneName }));
                 }
 
                 if (cmd.sceneName == _curSceneName && cmd.isRegisted)
                 {
                     cmd.Execute(new Notice(Command.Command_Reactive, null));
+                }
+            }
+
+            foreach (Command cmd in _commandDictionary.Values)
+            {
+                if (cmd.isSystem)
+                {
+                    cmd.Execute(new Notice(Command.System_SceneChanged, new object[] { _curSceneName, _lstSceneName }));
                 }
             }
 

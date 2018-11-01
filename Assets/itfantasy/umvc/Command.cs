@@ -16,7 +16,9 @@ namespace itfantasy.umvc
         public const int Monitor_Disposed = 104;
         public const int Monitor_Clicked = 105;
 
-        public const int System_SceneChange = 201;
+        public const int System_SceneChanged = 201;
+        public const int System_SceneEnter = 202;
+        public const int System_SceneLeave = 203;
         
         public const int Command_Reactive = 1001;
         public const int Command_Show = 1002;
@@ -171,6 +173,7 @@ namespace itfantasy.umvc
         public virtual void Dispose()
         {
             _noticeList.Clear();
+            RemoveMediator(true);
         }
     }
 }
