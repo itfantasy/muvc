@@ -10,7 +10,6 @@ namespace itfantasy.umvc
         protected Mediator _parent = null;
 
         private bool _monitoring = false;
-        private bool _inited = false;
 
         public object token { get; set; }
 
@@ -34,17 +33,11 @@ namespace itfantasy.umvc
         void Start()
         {
             SetEventListener();
-            UpdateViewContent();
-            _inited = true;
         }
 
         void OnEnable()
         {
             OnShowing();
-            if (_inited)
-            {
-                UpdateViewContent();
-            }
         }
 
         void OnDisable()

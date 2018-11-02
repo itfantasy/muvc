@@ -40,6 +40,7 @@ public class ##NAME##Mediator : Mediator
 		if (vo != null)
 		{
 			this._viewObj = vo;
+			this.UpdateViewContent();
 		}
     }
 
