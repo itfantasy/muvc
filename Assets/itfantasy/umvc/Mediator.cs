@@ -59,12 +59,12 @@ namespace itfantasy.umvc
 
         protected virtual void OnInitialize()
         {
-            SendMonitoringNotice(Command.Monitor_Inited, this.name);
+            SendMonitoringNotice(Command.Monitor_Inited, this.name, this.gameObject);
         }
 
         protected virtual void OnShowing()
         {
-            SendMonitoringNotice(Command.Monitor_Showed, this.name);
+            SendMonitoringNotice(Command.Monitor_Showed, this.name, this.gameObject);
         }
 
         protected virtual void OnClosing(Action callback) { callback.Invoke(); }
