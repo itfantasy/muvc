@@ -56,7 +56,23 @@ namespace itfantasy.umvc
             }
         }
 
-        public bool isSystem { get; set; }
+        private int _index;
+        public int index 
+        { 
+            get
+            {
+                return _index;
+            }
+        }
+
+        private bool _system;
+        public bool isSystem
+        {
+            get
+            {
+                return _system;
+            }
+        }
 
         private string _sceneName;
         public string sceneName
@@ -68,6 +84,12 @@ namespace itfantasy.umvc
         }
 
         public object token { get; set; }
+
+        public void SignInfo(int index, bool system)
+        {
+            this._index = index;
+            this._system = system;
+        }
 
         protected T RegisterMediator<T>(GameObject go, bool monitor=true) where T : Mediator
         {
@@ -131,6 +153,12 @@ namespace itfantasy.umvc
         protected void BroadNotice(int noticeType, params object[] body)
         {
             Facade.BroadNotice(noticeType, body);
+        }
+
+        protected void SelfNotice(int noticeType, params object[] body)
+        {
+            Notice notice = new Notice(noticeType, body);
+            this.Execute(notice);
         }
 
         private List<INotice> _noticeList = new List<INotice>();

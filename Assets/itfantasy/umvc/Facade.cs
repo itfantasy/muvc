@@ -16,10 +16,10 @@ namespace itfantasy.umvc
         {
             if (!_commandDictionary.ContainsKey(index))
             {
-                command.isSystem = system;
+                command.SignInfo(index, system);
                 if (index == Command.SystemIndex)
                 {
-                    command.isSystem = true;
+                    command.SignInfo(Command.SystemIndex, true);
                 }
                 _commandDictionary.Add(index, command);
             }
