@@ -196,6 +196,11 @@ namespace itfantasy.umvc
             return false;
         }
 
+        protected void ChangeScene(string sceneName, Action<object> callback = null, object token = null)
+        {
+            Facade.ChangeScene(sceneName, callback, token);
+        }
+
         public virtual void Execute(INotice notice) { }
 
         public virtual void Dispose()

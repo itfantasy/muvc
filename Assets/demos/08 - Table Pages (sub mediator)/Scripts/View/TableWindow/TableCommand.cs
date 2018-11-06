@@ -5,9 +5,11 @@ using System.Linq;
 using System.Text;
 using itfantasy.umvc;
 
-public class ##NAME##Command : Command
+public class TableCommand : Command
 {
-    ##NAME##Mediator mediator;
+    public const int Index = Worker_CZ.Index + 100;
+
+    TableMediator mediator;
 
     public override void Execute(INotice notice)
     {
@@ -15,8 +17,9 @@ public class ##NAME##Command : Command
         {
             case Command_Show:
                 GameObject go = null;
-
-                this.mediator = RegisterMediator<##NAME##Mediator>(go);
+                GameObject root = GameObject.Find("UIRoot");
+                go = root.transform.Find("TabWindow").gameObject;
+                this.mediator = RegisterMediator<TableMediator>(go);
 				this.SendToMediator(notice);
                 break;
             case Command_Close:
@@ -25,8 +28,9 @@ public class ##NAME##Command : Command
 
             case Command_Reactive:
                 GameObject rego = null; // must use a sync func to load the rego
-
-                this.mediator = RegisterMediator<##NAME##Mediator>(rego);
+                root = GameObject.Find("UIRoot");
+                rego = root.transform.Find("TabWindow").gameObject;
+                this.mediator = RegisterMediator<TableMediator>(rego);
 				this.SendToMediator(notice);
                 break;
 

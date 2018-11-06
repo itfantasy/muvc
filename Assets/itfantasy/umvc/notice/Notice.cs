@@ -42,11 +42,14 @@ namespace itfantasy.umvc
 
         public T GetBody<T>()
         {
-            foreach(object val in this._body)
+            if (this._body != null)
             {
-                if(val is T)
+                foreach (object val in this._body)
                 {
-                    return (T)val;
+                    if (val is T)
+                    {
+                        return (T)val;
+                    }
                 }
             }
             return default(T);

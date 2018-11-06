@@ -6,21 +6,21 @@ using System.Linq;
 using System.Text;
 using itfantasy.umvc;
 
-// using ##NAME##Vo = YourLogicVo;
+// using OtherVo = YourLogicVo;
 
-public class ##NAME##Mediator : Mediator
+public class OtherMediator : Mediator
 {
-    ##NAME##Command command
+    OtherCommand command
     {
         get
         {
-            return this._command as ##NAME##Command;
+            return this._command as OtherCommand;
         }
     }
 
-    ##NAME##Vo _viewObj;
+    OtherVo _viewObj;
 
-    public ##NAME##Vo viewObj
+    public OtherVo viewObj
     {
         get
         {
@@ -28,15 +28,18 @@ public class ##NAME##Mediator : Mediator
         }
     }
 
-    static ##NAME##Mediator that;
+    static OtherMediator that;
+
+    Button button;
 
     protected override void OnInitialize()
     {
         that = this;
+        this.button = this.transform.Find("Image/Button").GetComponent<Button>();
         base.OnInitialize();
     }
 
-    public void SetViewObj(##NAME##Vo vo)
+    public void SetViewObj(OtherVo vo)
     {
 		if (vo != null)
 		{
@@ -57,14 +60,12 @@ public class ##NAME##Mediator : Mediator
     {
 		if (this._viewObj == null)
 		{
-			this.SetViewObj(this._command.token as ##NAME##Vo);
+			this.SetViewObj(this._command.token as OtherVo);
 		}
     }
 
     public override void UpdateViewContent()
-    {    
-        
-
+    {
 
 
         base.UpdateViewContent();
@@ -72,13 +73,13 @@ public class ##NAME##Mediator : Mediator
 
     protected override void SetEventListener()
     {
-
+        EventTriggerListener.Get(this.button.gameObject).onClick = this.OnClick;
         base.SetEventListener();
     }
 
     protected override void OnClick(GameObject go)
     {
-
+        this.command.GotoKeepScene();
         base.OnClick(go);
     }
 
@@ -87,12 +88,10 @@ public class ##NAME##Mediator : Mediator
         switch (notice.GetType())
         {
             case Command.Command_Show:
-                ##NAME##Vo vo = notice.GetBody<##NAME##Vo>();
+                OtherVo vo = notice.GetBody<OtherVo>();
                 SetViewObj(vo);
                 break;
-			case Command.Command_Reactive:
-                LoadViewObj();
-                break;
+
         }
         base.HandleNotice(notice);
     }
@@ -105,7 +104,7 @@ public class ##NAME##Mediator : Mediator
     }
 }
 
-public class ##NAME##Vo
+public class OtherVo
 {
 
 }

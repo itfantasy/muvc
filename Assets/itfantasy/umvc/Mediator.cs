@@ -74,7 +74,12 @@ namespace itfantasy.umvc
 
         protected T AttachComponent<T>() where T : Component
         {
-            T comp = this.gameObject.GetComponent<T>();
+            return this.AttachComponent<T>(this.gameObject);
+        }
+
+        protected T AttachComponent<T>(GameObject go) where T : Component
+        {
+            T comp = go.GetComponent<T>();
             if (comp == null)
             {
                 comp = this.gameObject.AddComponent<T>();
