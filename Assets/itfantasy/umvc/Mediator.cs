@@ -82,7 +82,7 @@ namespace itfantasy.umvc
             T comp = go.GetComponent<T>();
             if (comp == null)
             {
-                comp = this.gameObject.AddComponent<T>();
+                comp = go.AddComponent<T>();
             }
             return comp;
         }
