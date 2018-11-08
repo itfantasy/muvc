@@ -41,9 +41,9 @@ public class TableMediator : Mediator
         buttonList.Add(this.transform.Find("Image/Button2").GetComponent<Button>());
         buttonList.Add(this.transform.Find("Image/Button3").GetComponent<Button>());
 
-        mediatorList.Add(AttachSubMediator<SubMediator>(this.transform.Find("Image1").gameObject));
-        mediatorList.Add(AttachSubMediator<SubMediator>(this.transform.Find("Image2").gameObject));
-        mediatorList.Add(AttachSubMediator<SubMediator>(this.transform.Find("Image3").gameObject));
+        mediatorList.Add(AttachSubMediator<SubPageMediator>(this.transform.Find("Image1").gameObject));
+        mediatorList.Add(AttachSubMediator<SubPageMediator>(this.transform.Find("Image2").gameObject));
+        mediatorList.Add(AttachSubMediator<SubPageMediator>(this.transform.Find("Image3").gameObject));
 
         base.OnInitialize();
     }
