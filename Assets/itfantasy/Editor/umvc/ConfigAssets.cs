@@ -32,6 +32,17 @@ namespace itfantasy.umvc.Editor
     [Serializable]
     public class CodeGeneratorConfig : ScriptableObject
     {
-        public string codeSavePath = "";
+        public string codeSavePath = "Scripts/";
+
+        public string uiGenerateFunc = "this.transform.Find(\"##PATH##\").GetComponent<##TYPE##>()";
+
+        public List<PrefixConfig> prefixConfigList = new List<PrefixConfig>();
+    }
+
+    [Serializable]
+    public class PrefixConfig
+    {
+        public string prefix;
+        public string classType;
     }
 }

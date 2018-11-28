@@ -18,6 +18,8 @@ public class ##NAME##Mediator : Mediator
         }
     }
 
+	##NAME##View view;
+
     ##NAME##Vo _viewObj;
 
     public ##NAME##Vo viewObj
@@ -32,6 +34,7 @@ public class ##NAME##Mediator : Mediator
 
     protected override void OnInitialize()
     {
+		this.view = this.AttachView<##NAME##View>();
         that = this;
         base.OnInitialize();
     }

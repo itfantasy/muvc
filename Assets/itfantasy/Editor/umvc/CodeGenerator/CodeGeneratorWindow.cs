@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -24,16 +25,22 @@ namespace itfantasy.umvc.Editor
             }
         }
 
+        public string name { get; set; }
+        public bool hasView { get; set; }
+        public GameObject root { get; set; }
+
         void OnInspectorUpdate()
         {
             Repaint();
         }
 
-        string name = "";
+        CodeGeneratorConfig config = null;
 
         void OnGUI()
         {
             name = EditorGUILayout.TextField("name", name);
+            hasView = EditorGUILayout.Toggle("hasView", hasView);
+            root = EditorGUILayout.ObjectField("root", root, typeof(GameObject), true) as GameObject;
             if (GUILayout.Button("Generate"))
             {
                 GenerateCode();
@@ -43,7 +50,7 @@ namespace itfantasy.umvc.Editor
 
         void GenerateCode()
         {
-            CodeGeneratorConfig config = ConfigAssets.LoadCodeGeneratorConfig();
+            config = ConfigAssets.LoadCodeGeneratorConfig();
 
             string templateDir = Application.dataPath + "/itfantasy/Editor/umvc/CodeGenerator/CodeTemplate";
 
@@ -59,6 +66,10 @@ namespace itfantasy.umvc.Editor
                 string saveName = fileName.Replace("Template", name);
                 string content = FileIOUtil.ReadFile(fileInfo.FullName);
                 string saveContent = content.Replace("##NAME##", name);
+                if (hasView && fileName == "TemplateView.cs")
+                {
+                    GenerateViewCode(ref saveContent);
+                }
                 string savePath = "/" + config.codeSavePath + "/" + name + "/" + saveName;
                 FileIOUtil.CreateFile(Application.dataPath + savePath, saveContent);
                 Debug.Log("[GenerateCode]:: " + savePath);
@@ -67,5 +78,65 @@ namespace itfantasy.umvc.Editor
             AssetDatabase.Refresh();
         }
 
+        List<ViewUIInfo> _viewUIInfoList;
+        string _uiList = "";
+        string _genUIList = "";
+
+        void GenerateViewCode(ref string saveContent)
+        {
+            _viewUIInfoList = new List<ViewUIInfo>();
+            _uiList = _genUIList = "";
+            TraverseUIFromGameObject(root);
+            foreach (ViewUIInfo info in _viewUIInfoList)
+            {
+                _uiList += String.Format("    public {0} {1};\r\n", info.classType, info.name);
+                string genUIListFormate = config.uiGenerateFunc.Replace("##PATH##", "{0}");
+                genUIListFormate = genUIListFormate.Replace("##TYPE##", "{1}");
+                _genUIList += String.Format("        " + genUIListFormate + ";\r\n", info.path, info.classType);
+            }
+            saveContent = saveContent.Replace("##UILIST##", _uiList);
+            saveContent = saveContent.Replace("##GENUILIST##", _genUIList);
+        }
+
+        void TraverseUIFromGameObject(GameObject go, string tempPath="")
+        {
+            if (go != root)
+            {
+                foreach(PrefixConfig item in config.prefixConfigList)
+                {
+                    if (go.name.StartsWith(item.prefix))
+                    {
+                        ViewUIInfo info = new ViewUIInfo();
+                        info.name = go.name;
+                        info.path = tempPath + info.name;
+                        info.classType = item.classType;
+                        _viewUIInfoList.Add(info);
+                    }
+                }
+            }
+            if (go.transform.childCount <= 0)
+            {
+                return;
+            }
+            for (int i = 0; i < go.transform.childCount; i++)
+            {
+                Transform child = go.transform.GetChild(i);
+                if (go == root)
+                {
+                    TraverseUIFromGameObject(child.gameObject, tempPath);
+                }
+                else
+                {
+                    TraverseUIFromGameObject(child.gameObject, tempPath + go.name + "/");
+                }
+            }
+        }
+    }
+
+    public class ViewUIInfo
+    {
+        public string name = "";
+        public string path = "";
+        public string classType = "";
     }
 }
