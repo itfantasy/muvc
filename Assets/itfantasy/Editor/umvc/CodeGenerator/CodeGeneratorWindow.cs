@@ -70,7 +70,7 @@ namespace itfantasy.umvc.Editor
                 {
                     GenerateViewCode(ref saveContent);
                 }
-                string savePath = "/" + config.codeSavePath + "/" + name + "/" + saveName;
+                string savePath = "/" + config.codeSavePath + "/" + name + "Window/" + saveName;
                 FileIOUtil.CreateFile(Application.dataPath + savePath, saveContent);
                 Debug.Log("[GenerateCode]:: " + savePath);
             }
@@ -92,7 +92,7 @@ namespace itfantasy.umvc.Editor
                 _uiList += String.Format("    public {0} {1};\r\n", info.classType, info.name);
                 string genUIListFormate = config.uiGenerateFunc.Replace("##PATH##", "{0}");
                 genUIListFormate = genUIListFormate.Replace("##TYPE##", "{1}");
-                _genUIList += String.Format("        " + genUIListFormate + ";\r\n", info.path, info.classType);
+                _genUIList += String.Format("        this." + info.name + " = " + genUIListFormate + ";\r\n", info.path, info.classType);
             }
             saveContent = saveContent.Replace("##UILIST##", _uiList);
             saveContent = saveContent.Replace("##GENUILIST##", _genUIList);
