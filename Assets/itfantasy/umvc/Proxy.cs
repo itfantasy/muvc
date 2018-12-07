@@ -44,7 +44,7 @@ namespace itfantasy.umvc
             Facade.SendAsyncNotice(cmdIndex, noticeType, callback, token, body);
         }
 
-        protected void BroadNotice(int noticeType, object[] body)
+        protected void BroadNotice(int noticeType, params object[] body)
         {
             Facade.BroadNotice(noticeType, body);
         }
