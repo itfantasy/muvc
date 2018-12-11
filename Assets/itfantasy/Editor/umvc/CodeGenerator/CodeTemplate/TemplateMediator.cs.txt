@@ -10,6 +10,8 @@ using itfantasy.umvc;
 
 public class ##NAME##Mediator : Mediator
 {
+	#region properties...
+
     ##NAME##Command command
     {
         get
@@ -32,12 +34,19 @@ public class ##NAME##Mediator : Mediator
 
     static ##NAME##Mediator that;
 
+	#endregion
+
     protected override void OnInitialize()
     {
 		this.view = this.AttachView<##NAME##View>();
         that = this;
+		// TODO: put your init logic here
+
+
         base.OnInitialize();
     }
+
+    #region state keeping...
 
     public void SetViewObj(##NAME##Vo vo)
     {
@@ -64,10 +73,11 @@ public class ##NAME##Mediator : Mediator
 		}
     }
 
+	#endregion
+
     public override void UpdateViewContent()
     {    
-        
-
+        // TODO: update the view content here
 
 
         base.UpdateViewContent();
@@ -75,6 +85,8 @@ public class ##NAME##Mediator : Mediator
 
     protected override void SetEventListener()
     {
+		// TODO: set the event listener function here
+
 
         base.SetEventListener();
     }
@@ -87,6 +99,7 @@ public class ##NAME##Mediator : Mediator
 
     public override void HandleNotice(INotice notice)
     {
+		// TODO: handle all notices from command
         switch (notice.GetType())
         {
             case Command.Command_Show:
@@ -96,6 +109,9 @@ public class ##NAME##Mediator : Mediator
 			case Command.Command_Reactive:
                 LoadViewObj();
                 break;
+			// TODO: others type notice...
+
+
         }
         base.HandleNotice(notice);
     }
@@ -104,10 +120,16 @@ public class ##NAME##Mediator : Mediator
     {
 		SaveViewObj();
         that = null;
+		// TODO: dispose other resources
+
+
         base.OnDispose();
     }
 }
 
+/// <summary>
+/// your logic view object
+/// </summary>
 public class ##NAME##Vo
 {
 
