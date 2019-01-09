@@ -28,6 +28,7 @@ namespace itfantasy.umvc.Editor
         public string name { get; set; }
         public bool hasView { get; set; }
         public GameObject root { get; set; }
+        public bool onlyView { get; set; }
 
         void OnInspectorUpdate()
         {
@@ -39,7 +40,10 @@ namespace itfantasy.umvc.Editor
         void OnGUI()
         {
             name = EditorGUILayout.TextField("name", name);
-            hasView = EditorGUILayout.Toggle("hasView", hasView);
+            if (!onlyView)
+            {
+                hasView = EditorGUILayout.Toggle("hasView", hasView);
+            }
             root = EditorGUILayout.ObjectField("root", root, typeof(GameObject), true) as GameObject;
             if (GUILayout.Button("Generate"))
             {
@@ -62,6 +66,13 @@ namespace itfantasy.umvc.Editor
                 {
                     continue;
                 }
+                if (onlyView)
+                {
+                    if (fileName != "TemplateView.cs.txt")
+                    {
+                        continue;
+                    }
+                }
                 fileName = fileName.Replace(".txt", "");
                 string saveName = fileName.Replace("Template", name);
                 string content = FileIOUtil.ReadFile(fileInfo.FullName);
@@ -71,6 +82,14 @@ namespace itfantasy.umvc.Editor
                     GenerateViewCode(ref saveContent);
                 }
                 string savePath = "/" + config.codeSavePath + "/" + name + "Window/" + saveName;
+                if(!onlyView)
+                {
+                    if(FileIOUtil.FileExists(Application.dataPath + savePath))
+                    {
+                        Debug.LogError("The target files have existed! However, if you want to recreate them, delete please!");
+                        return;
+                    }
+                }
                 FileIOUtil.CreateFile(Application.dataPath + savePath, saveContent);
                 Debug.Log("[GenerateCode]:: " + savePath);
             }
