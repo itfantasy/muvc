@@ -77,6 +77,7 @@ namespace itfantasy.umvc.Editor
                 string saveName = fileName.Replace("Template", name);
                 string content = FileIOUtil.ReadFile(fileInfo.FullName);
                 string saveContent = content.Replace("##NAME##", name);
+                saveContent = saveContent.Replace("##HASVIEW##", hasView ? "" : "//");
                 if (hasView && fileName == "TemplateView.cs")
                 {
                     GenerateViewCode(ref saveContent);

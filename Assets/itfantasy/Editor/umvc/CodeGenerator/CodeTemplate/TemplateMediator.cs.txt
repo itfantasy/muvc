@@ -20,7 +20,7 @@ public class ##NAME##Mediator : Mediator
         }
     }
 
-	##NAME##View view;
+	##HASVIEW####NAME##View view;
 
     ##NAME##Vo _viewObj;
 
@@ -38,7 +38,7 @@ public class ##NAME##Mediator : Mediator
 
     protected override void OnInitialize()
     {
-		this.view = this.AttachView<##NAME##View>();
+		##HASVIEW##this.view = this.AttachView<##NAME##View>();
         that = this;
 		// TODO: put your init logic here
 
