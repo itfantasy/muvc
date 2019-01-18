@@ -109,7 +109,7 @@ public class ##NAME##Mediator : Mediator
 			case Command.Command_Reactive:
                 LoadViewObj();
                 break;
-			// TODO: others type notice...
+			// TODO: others custom notices...
 
 
         }

@@ -7,28 +7,26 @@ using itfantasy.umvc;
 
 public class ##NAME##Command : Command
 {
-    
+
     public override void Execute(INotice notice)
     {
         switch(notice.GetType())
         {
             case Command_Show:
-                GameObject go = null;
-
-                RegisterMediator<##NAME##Mediator>(go);
-				this.SendToMediator(notice);
+				LoadResource("##NAME##Window", (go) => { 
+					RegisterMediator<##NAME##Mediator>(go);
+					this.SendToMediator(notice);
+                });
                 break;
             case Command_Close:
                 RemoveMediator();
                 break;
-
             case Command_Reactive:
-                GameObject rego = null; // must use a sync func to load the rego
-
+                GameObject rego = SyncLoadResource("##NAME##Window"); // must use a sync func to load the rego
                 RegisterMediator<##NAME##Mediator>(rego);
 				this.SendToMediator(notice);
                 break;
-
+			// TODO: others custom notices...
 
 
         }

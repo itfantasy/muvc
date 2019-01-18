@@ -208,5 +208,30 @@ namespace itfantasy.umvc
             _noticeList.Clear();
             RemoveMediator(true);
         }
+
+        public void LoadResource(string resourceName, Action<GameObject> callback)
+        {
+            if (Facade._resourceLoader != null)
+            {
+                Facade._resourceLoader.Invoke(resourceName, callback);
+            }
+            else
+            {
+                Debug.LogError("you must call the Facade.RegisterResourceLoader function to register a resloader behaviour at first!!");
+            }
+        }
+
+        public GameObject SyncLoadResource(string resourceName)
+        {
+            if (Facade._syncResourceLoader != null)
+            {
+                return Facade._syncResourceLoader.Invoke(resourceName);
+            }
+            else
+            {
+                Debug.LogError("you must call the Facade.RegisterSyncResourceLoader function to register a sync resloader behaviour at first!!");
+                return null;
+            }
+        }
     }
 }

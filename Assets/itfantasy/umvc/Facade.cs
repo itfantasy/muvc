@@ -131,7 +131,11 @@ namespace itfantasy.umvc
         private static Dictionary<string, List<AsyncArg>> _sceneCallbacks
             = new Dictionary<string, List<AsyncArg>>();
 
-        public static LoadSceneBehaviour loadSceneBehaviour { get; set; }
+        public static SceneLoader _sceneLoader;
+        public static void RegisterSceneLoader(SceneLoader sceneLoader)
+        {
+            _sceneLoader = sceneLoader;
+        }
 
         private static void DealSceneChangeCallbacks(string sceneName)
         {
@@ -156,7 +160,7 @@ namespace itfantasy.umvc
             _sceneCallbacks[sceneName].Add(new AsyncArg(callback, token));
         }
 
-        public static void ChangeScene(string sceneName, Action<object> callback = null, object token = null)
+        public static void ChangeScene(string sceneName, Action<object> callback = null, object token = null, object custom = null)
         {
             if (callback != null)
             {
@@ -177,9 +181,9 @@ namespace itfantasy.umvc
                     }
                 }
 
-                if (loadSceneBehaviour != null)
+                if (_sceneLoader != null)
                 {
-                    loadSceneBehaviour.Invoke(sceneName);
+                    _sceneLoader.Invoke(sceneName, custom);
                 }
                 else
                 {
@@ -219,6 +223,21 @@ namespace itfantasy.umvc
 
         #endregion
 
+        #region ------------------------> resloader
+
+        public static ResourceLoader _resourceLoader;
+        public static void RegisterResourceLoader(ResourceLoader resourceLoader)
+        {
+            _resourceLoader = resourceLoader;
+        }
+        public static SyncResourceLoader _syncResourceLoader;
+        public static void RegisterSyncResourceLoader(SyncResourceLoader syncResourceLoader)
+        {
+            _syncResourceLoader = syncResourceLoader;
+        }
+
+        #endregion
+
         public static void InitMVC()
         {
             foreach (Command command in _commandDictionary.Values)
@@ -235,6 +254,13 @@ namespace itfantasy.umvc
             SceneManager.sceneLoaded += OnSceneChange;
         }
 
+        public static void RegisterDefaultLoaders(SceneLoader sceneLoader, 
+            ResourceLoader resourceLoader, SyncResourceLoader syncResourceLoader)
+        {
+            _sceneLoader = sceneLoader;
+            _resourceLoader = resourceLoader;
+            _syncResourceLoader = syncResourceLoader;
+        }
     }
 
     public class AsyncArg
@@ -249,5 +275,7 @@ namespace itfantasy.umvc
         }
     }
 
-    public delegate void LoadSceneBehaviour(string sceneName);
+    public delegate void SceneLoader(string sceneName, object custom);
+    public delegate void ResourceLoader(string resourceName, Action<GameObject> callback);
+    public delegate GameObject SyncResourceLoader(string resourceName);
 }

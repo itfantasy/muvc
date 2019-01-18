@@ -10,7 +10,7 @@ using itfantasy.umvc;
 
 public class CodeGenMediator : Mediator
 {
-    #region properties...
+	#region properties...
 
     CodeGenCommand command
     {
@@ -34,13 +34,13 @@ public class CodeGenMediator : Mediator
 
     static CodeGenMediator that;
 
-    #endregion
+	#endregion
 
     protected override void OnInitialize()
     {
 		this.view = this.AttachView<CodeGenView>();
         that = this;
-        // TODO: put your init logic here
+		// TODO: put your init logic here
 
 
         base.OnInitialize();
@@ -73,13 +73,11 @@ public class CodeGenMediator : Mediator
 		}
     }
 
-    #endregion
+	#endregion
 
     public override void UpdateViewContent()
-    {
+    {    
         // TODO: update the view content here
-
-
         this.view.txtName.text = this.viewObj.name;
 
         base.UpdateViewContent();
@@ -87,24 +85,21 @@ public class CodeGenMediator : Mediator
 
     protected override void SetEventListener()
     {
-        // TODO: set the event listener function here
+		// TODO: set the event listener function here
 
-
-        EventTriggerListener.Get(this.view.btnOK.gameObject).onClick = this.OnClick;
 
         base.SetEventListener();
     }
 
     protected override void OnClick(GameObject go)
     {
-        Debug.Log("the button has been clicked!");
 
         base.OnClick(go);
     }
 
     public override void HandleNotice(INotice notice)
     {
-        // TODO: handle all notices from command
+		// TODO: handle all notices from command
         switch (notice.GetType())
         {
             case Command.Command_Show:
@@ -114,8 +109,7 @@ public class CodeGenMediator : Mediator
 			case Command.Command_Reactive:
                 LoadViewObj();
                 break;
-            // TODO: others type notice...
-
+			// TODO: others custom notices...
 
 
         }
@@ -126,7 +120,7 @@ public class CodeGenMediator : Mediator
     {
 		SaveViewObj();
         that = null;
-        // TODO: dispose other resources
+		// TODO: dispose other resources
 
 
         base.OnDispose();
@@ -139,6 +133,5 @@ public class CodeGenMediator : Mediator
 public class CodeGenVo
 {
     public string name { get; set; }
-
 }
 
