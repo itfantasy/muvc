@@ -209,11 +209,11 @@ namespace itfantasy.umvc
             RemoveMediator(true);
         }
 
-        public void LoadResource(string resourceName, Action<GameObject> callback)
+        public void LoadResource(string resourceName, Action<GameObject> callback, object custom = null)
         {
             if (Facade._resourceLoader != null)
             {
-                Facade._resourceLoader.Invoke(resourceName, callback);
+                Facade._resourceLoader.Invoke(resourceName, callback, custom);
             }
             else
             {
@@ -221,11 +221,11 @@ namespace itfantasy.umvc
             }
         }
 
-        public GameObject SyncLoadResource(string resourceName)
+        public GameObject SyncLoadResource(string resourceName, object custom = null)
         {
             if (Facade._syncResourceLoader != null)
             {
-                return Facade._syncResourceLoader.Invoke(resourceName);
+                return Facade._syncResourceLoader.Invoke(resourceName, custom);
             }
             else
             {

@@ -276,6 +276,6 @@ namespace itfantasy.umvc
     }
 
     public delegate void SceneLoader(string sceneName, object custom);
-    public delegate void ResourceLoader(string resourceName, Action<GameObject> callback);
-    public delegate GameObject SyncResourceLoader(string resourceName);
+    public delegate void ResourceLoader(string resourceName, Action<GameObject> callback, object custom);
+    public delegate GameObject SyncResourceLoader(string resourceName, object custom);
 }
