@@ -139,7 +139,7 @@ namespace itfantasy.umvc
 
         protected virtual void OnClick(GameObject go)
         {
-            
+            SendMonitoringNotice(Command.Monitor_Clicked, this.name, go.name);
         }
 
         protected virtual void SetEventListener() { }

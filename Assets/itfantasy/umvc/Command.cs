@@ -14,6 +14,7 @@ namespace itfantasy.umvc
         public const int Monitor_Showed = 102;
         public const int Monitor_Closed = 103;
         public const int Monitor_Disposed = 104;
+        public const int Monitor_Clicked = 105;
 
         public const int Monitor_Initing = 201;
         public const int Monitor_Showing = 202;
