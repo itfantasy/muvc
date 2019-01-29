@@ -12,15 +12,11 @@ namespace itfantasy.umvc
 
         private static Dictionary<int, Command> _commandDictionary = new Dictionary<int, Command>();
 
-        public static void RegisterCommand(int index, Command command, bool system=false)
+        public static void RegisterCommand(int index, Command command, string sceneName="")
         {
             if (!_commandDictionary.ContainsKey(index))
             {
-                command.SignInfo(index, system);
-                if (index == Command.SystemIndex)
-                {
-                    command.SignInfo(Command.SystemIndex, true);
-                }
+                command.SignInfo(index, sceneName);
                 _commandDictionary.Add(index, command);
             }
             else
@@ -173,13 +169,15 @@ namespace itfantasy.umvc
             }
             else
             {
+                SystemNotice(Command.Monitor_SceneLeaving, new object[] { _curSceneName, sceneName });
                 foreach (Command cmd in _commandDictionary.Values)
                 {
-                    if (cmd.isSystem)
+                    if (cmd.bindScene && cmd.sceneName == sceneName)
                     {
-                        cmd.Execute(new Notice(Command.System_SceneLeave, new object[] { _curSceneName, sceneName }));
+                        cmd.Execute(new Notice(Command.Command_SceneLeave, new object[] { _curSceneName, sceneName }));
                     }
                 }
+                SystemNotice(Command.Monitor_SceneLeaved, new object[] { _curSceneName, sceneName });
 
                 if (_sceneLoader != null)
                 {
@@ -194,14 +192,20 @@ namespace itfantasy.umvc
 
         private static void OnSceneChange(Scene scene, LoadSceneMode mode)
         {
+            if (mode == LoadSceneMode.Additive)
+            {
+                return;
+            }
+
             _lstSceneName = _curSceneName;
             _curSceneName = scene.name;
 
+            SystemNotice(Command.Monitor_SceneEntering, new object[] { _curSceneName, _lstSceneName });
             foreach (Command cmd in _commandDictionary.Values)
             {
-                if (cmd.isSystem)
+                if (cmd.bindScene && cmd.sceneName == _curSceneName)
                 {
-                    cmd.Execute(new Notice(Command.System_SceneEnter, new object[] { _curSceneName, _lstSceneName }));
+                    cmd.Execute(new Notice(Command.Command_SceneEnter, new object[] { _curSceneName, _lstSceneName }));
                 }
 
                 if (cmd.sceneName == _curSceneName && cmd.isRegisted)
@@ -209,14 +213,17 @@ namespace itfantasy.umvc
                     cmd.Execute(new Notice(Command.Command_Reactive, null));
                 }
             }
+            SystemNotice(Command.Monitor_SceneEntered, new object[] { _curSceneName, _lstSceneName });
 
+            SystemNotice(Command.Monitor_SceneChanging, new object[] { _curSceneName, _lstSceneName });
             foreach (Command cmd in _commandDictionary.Values)
             {
-                if (cmd.isSystem)
+                if (cmd.bindScene && cmd.sceneName == _curSceneName)
                 {
-                    cmd.Execute(new Notice(Command.System_SceneChanged, new object[] { _curSceneName, _lstSceneName }));
+                    cmd.Execute(new Notice(Command.Command_SceneChange, new object[] { _curSceneName, _lstSceneName }));
                 }
             }
+            SystemNotice(Command.Monitor_SceneChanged, new object[] { _curSceneName, _lstSceneName });
 
             DealSceneChangeCallbacks(_curSceneName);
         }

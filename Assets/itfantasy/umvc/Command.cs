@@ -14,11 +14,19 @@ namespace itfantasy.umvc
         public const int Monitor_Showed = 102;
         public const int Monitor_Closed = 103;
         public const int Monitor_Disposed = 104;
-        public const int Monitor_Clicked = 105;
 
-        public const int System_SceneChanged = 201;
-        public const int System_SceneEnter = 202;
-        public const int System_SceneLeave = 203;
+        public const int Monitor_Initing = 201;
+        public const int Monitor_Showing = 202;
+        public const int Monitor_Closing = 203;
+        public const int Monitor_Disposing = 204;
+
+        public const int Monitor_SceneChanged = 301;
+        public const int Monitor_SceneEntered = 302;
+        public const int Monitor_SceneLeaved = 303;
+
+        public const int Monitor_SceneChanging = 401;
+        public const int Monitor_SceneEntering = 402;
+        public const int Monitor_SceneLeaving = 403;
         
         public const int Command_Reactive = 1001;
         public const int Command_Show = 1002;
@@ -26,6 +34,10 @@ namespace itfantasy.umvc
         public const int Command_OK = 1004;
         public const int Command_Trigger = 1005;
         public const int Command_Cancel = 1006;
+
+        public const int Command_SceneChange = 1101;
+        public const int Command_SceneEnter = 1102;
+        public const int Command_SceneLeave = 1103;
 
         protected Mediator _mediator;
 
@@ -65,12 +77,12 @@ namespace itfantasy.umvc
             }
         }
 
-        private bool _system;
-        public bool isSystem
+        private bool _bindScene;
+        public bool bindScene
         {
             get
             {
-                return _system;
+                return _bindScene;
             }
         }
 
@@ -85,10 +97,14 @@ namespace itfantasy.umvc
 
         public object token { get; set; }
 
-        public void SignInfo(int index, bool system)
+        public void SignInfo(int index, string bindSceneName="")
         {
             this._index = index;
-            this._system = system;
+            if (bindSceneName != "")
+            {
+                this._sceneName = bindSceneName;
+                this._bindScene = true;
+            }
         }
 
         protected T RegisterMediator<T>(GameObject go, bool monitor=true) where T : Mediator
@@ -103,7 +119,10 @@ namespace itfantasy.umvc
                 _mediator.SignCommand(this, monitor);
             }
             _mediator.Show();
-            _sceneName = Facade.curSceneName;
+            if (!_bindScene)
+            {
+                _sceneName = Facade.curSceneName;
+            }
             _registed = true;
             return _mediator as T;
         }
@@ -114,7 +133,10 @@ namespace itfantasy.umvc
             {
                 _mediator.Close(dispose);
             }
-            _sceneName = "";
+            if (!_bindScene)
+            {
+                _sceneName = "";
+            }
             _registed = false;
         }
 

@@ -26,7 +26,9 @@ namespace itfantasy.umvc
 
         void Awake()
         {
+            SendMonitoringNotice(Command.Monitor_Initing, this.name, this.gameObject);
             OnInitialize();
+            SendMonitoringNotice(Command.Monitor_Inited, this.name, this.gameObject);
         }
 
         // Use this for initialization
@@ -37,39 +39,43 @@ namespace itfantasy.umvc
 
         void OnEnable()
         {
+            SendMonitoringNotice(Command.Monitor_Showing, this.name, this.gameObject);
             OnShowing();
+            SendMonitoringNotice(Command.Monitor_Showed, this.name, this.gameObject);
         }
 
         void OnDisable()
         {
             OnClose();
+            SendMonitoringNotice(Command.Monitor_Closed, this.name);
         }
 
         void OnDestroy()
         {
             OnDispose();
+            SendMonitoringNotice(Command.Monitor_Disposed, this.name);
         }
 
         protected virtual void OnInitialize()
         {
-            SendMonitoringNotice(Command.Monitor_Inited, this.name, this.gameObject);
+            
         }
 
         protected virtual void OnShowing()
         {
-            SendMonitoringNotice(Command.Monitor_Showed, this.name, this.gameObject);
+            
         }
 
         protected virtual void OnClosing(Action callback) { callback.Invoke(); }
 
         protected virtual void OnClose()
         {
-            SendMonitoringNotice(Command.Monitor_Closed, this.name);
+            
         }
 
         protected virtual void OnDispose()
         {
-            SendMonitoringNotice(Command.Monitor_Disposed, this.name);
+            
         }
 
         protected T AttachComponent<T>() where T : Component
@@ -133,7 +139,7 @@ namespace itfantasy.umvc
 
         protected virtual void OnClick(GameObject go)
         {
-            SendMonitoringNotice(Command.Monitor_Clicked, this.name, go.name);
+            
         }
 
         protected virtual void SetEventListener() { }
@@ -147,10 +153,12 @@ namespace itfantasy.umvc
 
         public virtual void Close(bool dispose = false)
         {
+            SendMonitoringNotice(Command.Monitor_Closing, this.name);
             this.OnClosing(() =>
             {
                 if (dispose)
                 {
+                    SendMonitoringNotice(Command.Monitor_Disposing, this.name);
                     this.Dispose();
                 }
                 else
