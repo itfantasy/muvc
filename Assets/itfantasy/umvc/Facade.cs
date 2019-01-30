@@ -156,6 +156,12 @@ namespace itfantasy.umvc
             _sceneCallbacks[sceneName].Add(new AsyncArg(callback, token));
         }
 
+        private static bool _sceneChangeCanceling = false;
+        public static void CancelSceneChange()
+        {
+            _sceneChangeCanceling = true;
+        }
+
         public static void ChangeScene(string sceneName, Action<object> callback = null, object token = null, object custom = null)
         {
             if (callback != null)
@@ -178,6 +184,12 @@ namespace itfantasy.umvc
                     }
                 }
                 SystemNotice(Command.Monitor_SceneLeaved, new object[] { _curSceneName, sceneName });
+
+                if (_sceneChangeCanceling)
+                {
+                    _sceneChangeCanceling = false;
+                    return;
+                }
 
                 if (_sceneLoader != null)
                 {
@@ -252,11 +264,14 @@ namespace itfantasy.umvc
                 command.Dispose();
             }
             _commandDictionary.Clear();
+
             foreach (IBaseProxy proxy in _proxyList)
             {
                 proxy.Dispose();
             }
             _proxyList.Clear();
+
+            _sceneChangeCanceling = false;
             SceneManager.sceneLoaded -= OnSceneChange;
             SceneManager.sceneLoaded += OnSceneChange;
         }
