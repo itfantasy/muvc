@@ -8,6 +8,8 @@ namespace itfantasy.umvc
 {
     public class Command : IDisposable
     {
+        #region consts...
+
         public const int SystemIndex = 0;
 
         public const int Monitor_Inited = 101;
@@ -41,6 +43,10 @@ namespace itfantasy.umvc
         public const int Command_SceneLeave = 1103;
 
         public const int Command_UserCustom = 10000;
+
+        #endregion
+
+        #region properties...
 
         protected Mediator _mediator;
 
@@ -100,7 +106,9 @@ namespace itfantasy.umvc
 
         public object token { get; set; }
 
-        public void SignInfo(int index, string bindSceneName="")
+        #endregion
+
+        public void SignInfo(int index, string bindSceneName = "")
         {
             this._index = index;
             if (bindSceneName != "")
@@ -109,6 +117,8 @@ namespace itfantasy.umvc
                 this._bindScene = true;
             }
         }
+
+        #region mediator...
 
         protected T RegisterMediator<T>(GameObject go, bool monitor=true) where T : Mediator
         {
@@ -150,6 +160,10 @@ namespace itfantasy.umvc
                 _mediator.UpdateViewContent();
             }
         }
+
+        #endregion
+
+        #region notice...
 
         protected void SendNotice(int cmdIndex, int noticeType, params object[] body)
         {
@@ -221,10 +235,21 @@ namespace itfantasy.umvc
             return false;
         }
 
+        #endregion
+
+        #region scene...
+
         protected void ChangeScene(string sceneName, Action<object> callback = null, object token = null)
         {
             Facade.ChangeScene(sceneName, callback, token);
         }
+
+        protected Action CancelSceneChange()
+        {
+            return Facade.CancelSceneChange();
+        }
+
+        #endregion
 
         public virtual void Execute(INotice notice) { }
 
@@ -233,6 +258,8 @@ namespace itfantasy.umvc
             _noticeList.Clear();
             RemoveMediator(true);
         }
+
+        #region resource loader...
 
         public void LoadResource(string resourceName, Action<GameObject> callback, object custom = null)
         {
@@ -258,5 +285,7 @@ namespace itfantasy.umvc
                 return null;
             }
         }
+
+        #endregion
     }
 }

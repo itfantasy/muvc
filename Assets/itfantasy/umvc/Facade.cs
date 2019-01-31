@@ -157,9 +157,22 @@ namespace itfantasy.umvc
         }
 
         private static bool _sceneChangeCanceling = false;
-        public static void CancelSceneChange()
+        private static string _continueSceneName = "";
+        private static object _continueCustom = null;
+
+        public static Action CancelSceneChange()
         {
             _sceneChangeCanceling = true;
+            return () => {
+                if (_sceneLoader != null)
+                {
+                    _sceneLoader.Invoke(_continueSceneName, _continueCustom);
+                }
+                else
+                {
+                    SceneManager.LoadScene(_continueSceneName);
+                }
+            };
         }
 
         public static void ChangeScene(string sceneName, Action<object> callback = null, object token = null, object custom = null)
@@ -175,6 +188,9 @@ namespace itfantasy.umvc
             }
             else
             {
+                _continueSceneName = sceneName;
+                _continueCustom = custom;
+
                 SystemNotice(Command.Monitor_SceneLeaving, new object[] { _curSceneName, sceneName });
                 foreach (Command cmd in _commandDictionary.Values)
                 {
@@ -271,9 +287,14 @@ namespace itfantasy.umvc
             }
             _proxyList.Clear();
 
-            _sceneChangeCanceling = false;
             SceneManager.sceneLoaded -= OnSceneChange;
             SceneManager.sceneLoaded += OnSceneChange;
+
+            _sceneCallbacks.Clear();
+
+            _sceneChangeCanceling = false;
+            _continueSceneName = "";
+            _continueCustom = null;
         }
 
         public static void RegisterDefaultLoaders(SceneLoader sceneLoader, 
