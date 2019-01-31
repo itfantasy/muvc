@@ -188,6 +188,7 @@ namespace itfantasy.umvc
             }
             else
             {
+                _sceneChangeCanceling = false;
                 _continueSceneName = sceneName;
                 _continueCustom = custom;
 
