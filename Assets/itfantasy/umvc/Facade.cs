@@ -194,9 +194,14 @@ namespace itfantasy.umvc
                 SystemNotice(Command.Monitor_SceneLeaving, new object[] { _curSceneName, sceneName });
                 foreach (Command cmd in _commandDictionary.Values)
                 {
-                    if (cmd.bindScene && cmd.sceneName == sceneName)
+                    if (cmd.bindScene && cmd.sceneName == _curSceneName)
                     {
                         cmd.Execute(new Notice(Command.Command_SceneLeave, new object[] { _curSceneName, sceneName }));
+                    }
+
+                    if (cmd.bindScene && cmd.sceneName == sceneName)
+                    {
+                        cmd.Execute(new Notice(Command.Command_SceneLoading, new object[] { sceneName, _curSceneName }));
                     }
                 }
                 SystemNotice(Command.Monitor_SceneLeaved, new object[] { _curSceneName, sceneName });

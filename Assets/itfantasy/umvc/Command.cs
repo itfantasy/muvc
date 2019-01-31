@@ -41,6 +41,7 @@ namespace itfantasy.umvc
         public const int Command_SceneChange = 1101;
         public const int Command_SceneEnter = 1102;
         public const int Command_SceneLeave = 1103;
+        public const int Command_SceneLoading = 1104;
 
         public const int Command_UserCustom = 10000;
 
