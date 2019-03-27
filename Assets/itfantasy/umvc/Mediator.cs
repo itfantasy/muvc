@@ -11,6 +11,19 @@ namespace itfantasy.umvc
 
         private bool _monitoring = false;
 
+        public string NAME
+        {
+            get
+            {
+                string n = this.name;
+                if (n.EndsWith("(Clone)"))
+                {
+                    n = n.Substring(0, n.Length - 7);
+                }
+                return n;
+            }
+        }
+
         public object token { get; set; }
 
         public void SignCommand(Command command, bool monitor = false)
@@ -26,9 +39,9 @@ namespace itfantasy.umvc
 
         void Awake()
         {
-            SendMonitoringNotice(Command.Monitor_Initing, this.name, this.gameObject);
+            SendMonitoringNotice(Command.Monitor_Initing, this.NAME, this.gameObject);
             OnInitialize();
-            SendMonitoringNotice(Command.Monitor_Inited, this.name, this.gameObject);
+            SendMonitoringNotice(Command.Monitor_Inited, this.NAME, this.gameObject);
         }
 
         // Use this for initialization
@@ -39,21 +52,21 @@ namespace itfantasy.umvc
 
         void OnEnable()
         {
-            SendMonitoringNotice(Command.Monitor_Showing, this.name, this.gameObject);
+            SendMonitoringNotice(Command.Monitor_Showing, this.NAME, this.gameObject);
             OnShowing();
-            SendMonitoringNotice(Command.Monitor_Showed, this.name, this.gameObject);
+            SendMonitoringNotice(Command.Monitor_Showed, this.NAME, this.gameObject);
         }
 
         void OnDisable()
         {
             OnClose();
-            SendMonitoringNotice(Command.Monitor_Closed, this.name);
+            SendMonitoringNotice(Command.Monitor_Closed, this.NAME);
         }
 
         void OnDestroy()
         {
             OnDispose();
-            SendMonitoringNotice(Command.Monitor_Disposed, this.name);
+            SendMonitoringNotice(Command.Monitor_Disposed, this.NAME);
         }
 
         protected virtual void OnInitialize()
@@ -139,7 +152,7 @@ namespace itfantasy.umvc
 
         protected virtual void OnClick(GameObject go)
         {
-            SendMonitoringNotice(Command.Monitor_Clicked, this.name, go.name);
+            SendMonitoringNotice(Command.Monitor_Clicked, this.NAME, go.name);
         }
 
         protected virtual void SetEventListener() { }
@@ -153,12 +166,12 @@ namespace itfantasy.umvc
 
         public virtual void Close(bool dispose = false)
         {
-            SendMonitoringNotice(Command.Monitor_Closing, this.name);
+            SendMonitoringNotice(Command.Monitor_Closing, this.NAME);
             this.OnClosing(() =>
             {
                 if (dispose)
                 {
-                    SendMonitoringNotice(Command.Monitor_Disposing, this.name);
+                    SendMonitoringNotice(Command.Monitor_Disposing, this.NAME);
                     this.Dispose();
                 }
                 else
