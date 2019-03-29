@@ -22,6 +22,7 @@ namespace itfantasy.umvc
         public const int Monitor_Showing = 202;
         public const int Monitor_Closing = 203;
         public const int Monitor_Disposing = 204;
+        public const int Monitor_Clicking = 205;
 
         public const int Monitor_SceneChanged = 301;
         public const int Monitor_SceneEntered = 302;
@@ -39,9 +40,9 @@ namespace itfantasy.umvc
 
         public const int Command_Show = 2001;
         public const int Command_Close = 2002;
-        public const int Command_OK = 2003;
-        public const int Command_Cancel = 2004;
-        public const int Command_Trigger = 2005;
+        public const int Command_Trigger = 2003;
+        public const int Command_OK = 2004;
+        public const int Command_Cancel = 2005;
         public const int Command_GotoScene = 2006;
 
         public const int Command_UserCustom = 10000;

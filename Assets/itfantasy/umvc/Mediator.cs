@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using itfantasy.igui;
 
 namespace itfantasy.umvc
 {
@@ -10,6 +13,8 @@ namespace itfantasy.umvc
         protected Mediator _parent = null;
 
         private bool _monitoring = false;
+        private Dictionary<GameObject, Action<GameObject>> _clickListeners
+            = new Dictionary<GameObject, Action<GameObject>>();
 
         public string NAME
         {
@@ -47,14 +52,14 @@ namespace itfantasy.umvc
         // Use this for initialization
         void Start()
         {
+            _clickListeners.Clear();
             SetEventListener();
+            Showing();
         }
 
         void OnEnable()
         {
-            SendMonitoringNotice(Command.Monitor_Showing, this.NAME, this.gameObject);
-            OnShowing();
-            SendMonitoringNotice(Command.Monitor_Showed, this.NAME, this.gameObject);
+            Showing();
         }
 
         void OnDisable()
@@ -72,6 +77,13 @@ namespace itfantasy.umvc
         protected virtual void OnInitialize()
         {
             
+        }
+
+        private void Showing()
+        {
+            SendMonitoringNotice(Command.Monitor_Showing, this.NAME, this.gameObject);
+            OnShowing();
+            SendMonitoringNotice(Command.Monitor_Showed, this.NAME, this.gameObject);
         }
 
         protected virtual void OnShowing()
@@ -134,10 +146,26 @@ namespace itfantasy.umvc
         protected void SendNotice(int noticeType, params object[] body)
         {
             Notice notice = new Notice(noticeType, body);
+            SendNotice(notice);
+        }
+
+        protected void SendNotice(Notice notice)
+        {
             if (_command != null)
             {
                 _command.Execute(notice);
             }
+        }
+
+        protected virtual void OK(params object[] body)
+        {
+            Notice notice = new Notice(Command.Command_OK, body);
+            SendNotice(notice);
+        }
+
+        protected virtual void Cancel()
+        {
+            SendNotice(Command.Command_Cancel);
         }
 
         private void SendMonitoringNotice(int noticeType, params object[] body)
@@ -150,9 +178,34 @@ namespace itfantasy.umvc
 
         public virtual void HandleNotice(INotice notice) { }
 
+        protected void SetClick(Button btn, Action<GameObject> onClick = null)
+        {
+            SetClick(btn.gameObject, onClick);
+        }
+
+        protected void SetClick(GameObject go, Action<GameObject> onClick = null)
+        {
+            if(onClick == null)
+            {
+                onClick = this.OnClick;
+            }
+            _clickListeners[go] = onClick;
+            UIClickListener.Get(go).onClick = this.Clicking;
+        }
+
+        private void Clicking(GameObject go)
+        {
+            if (_clickListeners.ContainsKey(go))
+            {
+                SendMonitoringNotice(Command.Monitor_Clicking, this.NAME, go.name);
+                _clickListeners[go].Invoke(go);
+                SendMonitoringNotice(Command.Monitor_Clicked, this.NAME, go.name);
+            }
+        }
+
         protected virtual void OnClick(GameObject go)
         {
-            SendMonitoringNotice(Command.Monitor_Clicked, this.NAME, go.name);
+
         }
 
         protected virtual void SetEventListener() { }

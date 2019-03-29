@@ -27,6 +27,13 @@ public class CodeGenCommand : Command
                 RegisterMediator<CodeGenMediator>(rego);
 				this.SendToMediator(notice);
                 break;
+			case Command_OK:
+				// TODO: the Mediator.OK() Logic
+				
+				break;
+			case Command_Cancel:
+				SelfNotice(Command_Close);
+				break;
 			// TODO: others custom notices...
 
 

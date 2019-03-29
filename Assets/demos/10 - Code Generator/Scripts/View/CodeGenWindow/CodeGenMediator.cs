@@ -78,7 +78,7 @@ public class CodeGenMediator : Mediator
     public override void UpdateViewContent()
     {    
         // TODO: update the view content here
-        this.view.txtName.text = this.viewObj.name;
+
 
         base.UpdateViewContent();
     }
@@ -86,15 +86,19 @@ public class CodeGenMediator : Mediator
     protected override void SetEventListener()
     {
 		// TODO: set the event listener function here
-
+        SetClick(this.view.btnOK, (go) => {
+            OK();
+        });
+        SetClick(this.view.btnCancel, (go) => {
+            Cancel();
+        });
 
         base.SetEventListener();
     }
 
     protected override void OnClick(GameObject go)
     {
-
-        base.OnClick(go);
+        
     }
 
     public override void HandleNotice(INotice notice)

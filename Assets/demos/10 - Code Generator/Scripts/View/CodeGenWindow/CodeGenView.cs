@@ -13,6 +13,7 @@ public class CodeGenView : View
     public Text txtName;
     public Image imgHead;
     public Button btnOK;
+    public Button btnCancel;
 
     protected override void OnInitialize()
     {
@@ -21,6 +22,7 @@ public class CodeGenView : View
         this.txtName = this.transform.Find("imgBg/txtName").GetComponent<Text>();
         this.imgHead = this.transform.Find("imgBg/imgHead").GetComponent<Image>();
         this.btnOK = this.transform.Find("imgBg/btnOK").GetComponent<Button>();
+        this.btnCancel = this.transform.Find("imgBg/btnCancel").GetComponent<Button>();
 
         base.OnInitialize();
     }
