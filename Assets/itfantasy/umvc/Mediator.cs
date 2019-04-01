@@ -12,6 +12,7 @@ namespace itfantasy.umvc
         protected Command _command = null;
         protected Mediator _parent = null;
 
+        private bool _inited = false;
         private bool _monitoring = false;
         private Dictionary<GameObject, Action<GameObject>> _clickListeners
             = new Dictionary<GameObject, Action<GameObject>>();
@@ -54,12 +55,16 @@ namespace itfantasy.umvc
         {
             _clickListeners.Clear();
             SetEventListener();
+            _inited = true;
             Showing();
         }
 
         void OnEnable()
         {
-            Showing();
+            if (_inited)
+            {
+                Showing();
+            }
         }
 
         void OnDisable()
