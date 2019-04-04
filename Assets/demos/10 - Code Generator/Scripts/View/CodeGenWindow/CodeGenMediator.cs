@@ -42,7 +42,6 @@ public class CodeGenMediator : Mediator
         that = this;
 		// TODO: put your init logic here
 
-
         base.OnInitialize();
     }
 

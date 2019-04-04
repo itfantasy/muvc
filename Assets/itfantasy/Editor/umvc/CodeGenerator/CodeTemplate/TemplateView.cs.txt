@@ -9,6 +9,8 @@ using itfantasy.umvc;
 public class ##NAME##View : View
 {
 
+#region Only for components aggregation, please edit your business logic in Mediator ...
+
 ##UILIST##
     protected override void OnInitialize()
     {
@@ -17,4 +19,6 @@ public class ##NAME##View : View
         base.OnInitialize();
     }
 }
+
+#endregion
 

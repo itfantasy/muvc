@@ -86,6 +86,22 @@ namespace itfantasy.umvc
 
         #region -------------------------> system notice
 
+        private static Dictionary<string, bool> _monitorDict = new Dictionary<string, bool>();
+
+        public static void SetMonitor(string name, bool val)
+        {
+            _monitorDict[name] = val;
+        }
+
+        public static bool CheckMonitor(string name)
+        {
+            if (_monitorDict.ContainsKey(name))
+            {
+                return _monitorDict[name];
+            }
+            return false;
+        }
+
         public static void SystemNotice(int noticeType, object[] body)
         {
             SendNotice(Command.SystemIndex, noticeType, body);
@@ -296,6 +312,7 @@ namespace itfantasy.umvc
             SceneManager.sceneLoaded -= OnSceneChange;
             SceneManager.sceneLoaded += OnSceneChange;
 
+            _monitorDict.Clear();
             _sceneCallbacks.Clear();
 
             _sceneChangeCanceling = false;

@@ -12,8 +12,20 @@ namespace itfantasy.umvc
         protected Command _command = null;
         protected Mediator _parent = null;
 
-        private bool _inited = false;
+        private bool _monitorchecked = false;
         private bool _monitoring = false;
+        private bool monitoring
+        {
+            get
+            {
+                if (!_monitorchecked)
+                {
+                    _monitoring = Facade.CheckMonitor(this.name);
+                }
+                return _monitoring;
+            }
+        }
+
         private Dictionary<GameObject, Action<GameObject>> _clickListeners
             = new Dictionary<GameObject, Action<GameObject>>();
 
@@ -32,10 +44,9 @@ namespace itfantasy.umvc
 
         public object token { get; set; }
 
-        public void SignCommand(Command command, bool monitor = false)
+        public void SignCommand(Command command)
         {
             this._command = command;
-            this._monitoring = monitor;
         }
 
         public void SignParent(Mediator parent)
@@ -55,16 +66,13 @@ namespace itfantasy.umvc
         {
             _clickListeners.Clear();
             SetEventListener();
-            _inited = true;
-            Showing();
         }
 
         void OnEnable()
         {
-            if (_inited)
-            {
-                Showing();
-            }
+            SendMonitoringNotice(Command.Monitor_Showing, this.NAME, this.gameObject);
+            OnShowing();
+            SendMonitoringNotice(Command.Monitor_Showed, this.NAME, this.gameObject);
         }
 
         void OnDisable()
@@ -82,13 +90,6 @@ namespace itfantasy.umvc
         protected virtual void OnInitialize()
         {
             
-        }
-
-        private void Showing()
-        {
-            SendMonitoringNotice(Command.Monitor_Showing, this.NAME, this.gameObject);
-            OnShowing();
-            SendMonitoringNotice(Command.Monitor_Showed, this.NAME, this.gameObject);
         }
 
         protected virtual void OnShowing()
@@ -175,7 +176,7 @@ namespace itfantasy.umvc
 
         private void SendMonitoringNotice(int noticeType, params object[] body)
         {
-            if (this._monitoring)
+            if (this.monitoring)
             {
                 Facade.SystemNotice(noticeType, body);
             }

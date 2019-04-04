@@ -125,6 +125,7 @@ namespace itfantasy.umvc
 
         protected T RegisterMediator<T>(GameObject go, bool monitor=true) where T : Mediator
         {
+            Facade.SetMonitor(go.name, monitor);
             if (_mediator == null)
             {
                 _mediator = go.GetComponent<T>();
@@ -132,7 +133,7 @@ namespace itfantasy.umvc
                 {
                     _mediator = go.AddComponent<T>();
                 }
-                _mediator.SignCommand(this, monitor);
+                _mediator.SignCommand(this);
             }
             _mediator.Show();
             if (!_bindScene)
