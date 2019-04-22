@@ -213,12 +213,12 @@ namespace itfantasy.umvc
                 {
                     if (cmd.bindScene && cmd.sceneName == _curSceneName)
                     {
-                        cmd.Execute(new Notice(Command.Command_SceneLeave, new object[] { _curSceneName, sceneName }));
+                        cmd.Execute(new Notice(Command.Scene_Leave, new object[] { _curSceneName, sceneName }));
                     }
 
                     if (cmd.bindScene && cmd.sceneName == sceneName)
                     {
-                        cmd.Execute(new Notice(Command.Command_SceneLoading, new object[] { sceneName, _curSceneName }));
+                        cmd.Execute(new Notice(Command.Scene_Loading, new object[] { sceneName, _curSceneName }));
                     }
                 }
                 SystemNotice(Command.Monitor_SceneLeaved, new object[] { _curSceneName, sceneName });
@@ -255,7 +255,7 @@ namespace itfantasy.umvc
             {
                 if (cmd.bindScene && cmd.sceneName == _curSceneName)
                 {
-                    cmd.Execute(new Notice(Command.Command_SceneEnter, new object[] { _curSceneName, _lstSceneName }));
+                    cmd.Execute(new Notice(Command.Scene_Enter, new object[] { _curSceneName, _lstSceneName }));
                 }
 
                 if (cmd.sceneName == _curSceneName && cmd.isRegisted)
@@ -270,7 +270,7 @@ namespace itfantasy.umvc
             {
                 if (cmd.bindScene && cmd.sceneName == _curSceneName)
                 {
-                    cmd.Execute(new Notice(Command.Command_SceneChange, new object[] { _curSceneName, _lstSceneName }));
+                    cmd.Execute(new Notice(Command.Scene_Change, new object[] { _curSceneName, _lstSceneName }));
                 }
             }
             SystemNotice(Command.Monitor_SceneChanged, new object[] { _curSceneName, _lstSceneName });

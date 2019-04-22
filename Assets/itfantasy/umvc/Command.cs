@@ -32,18 +32,18 @@ namespace itfantasy.umvc
         public const int Monitor_SceneEntering = 402;
         public const int Monitor_SceneLeaving = 403;
         
-        public const int Command_Reactive = 1001;
-        public const int Command_SceneChange = 1002;
-        public const int Command_SceneEnter = 1003;
-        public const int Command_SceneLeave = 1004;
-        public const int Command_SceneLoading = 1005;
+        public const int Scene_Change = 1001;
+        public const int Scene_Enter = 1002;
+        public const int Scene_Leave = 1003;
+        public const int Scene_Loading = 1004;
 
-        public const int Command_Show = 2001;
-        public const int Command_Close = 2002;
-        public const int Command_Trigger = 2003;
-        public const int Command_OK = 2004;
-        public const int Command_Cancel = 2005;
-        public const int Command_GotoScene = 2006;
+        public const int Command_Reactive = 2001;
+        public const int Command_Show = 2002;
+        public const int Command_Close = 2003;
+        public const int Command_Trigger = 2004;
+        public const int Command_OK = 2005;
+        public const int Command_Cancel = 2006;
+        public const int Command_GotoScene = 2007;
 
         public const int Command_UserCustom = 10000;
 
