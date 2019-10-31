@@ -3,40 +3,82 @@ using System.Collections;
 using System.Collections.Generic;
 using itfantasy.umvc;
 
-/// <summary>
-/// 描述：
-/// 作者： 
-/// </summary>
-public class WindowStack {
+public class WindowStackManager
+{
+    private static WindowStackManager _ins;
 
-    private static WindowStack _ins;
-
-    public static WindowStack ins
+    public static WindowStackManager ins
     {
         get
         {
-            if(_ins == null)
+            if (_ins == null)
             {
-                _ins = new WindowStack();
+                _ins = new WindowStackManager();
             }
             return _ins;
         }
     }
-	
-	public void PushStack(string windowName, int index, int noticeType, params object[] noticeBody)
+
+    private List<WindowStack> _stacks = new List<WindowStack>();
+    private List<WindowStack> _dirtyStacks = new List<WindowStack>();
+
+    public WindowStack CreateWindowStack()
     {
-        StackNotice stackNotice = new StackNotice(windowName, index, noticeType, noticeBody);
-        noticeList.Add(stackNotice);
+        WindowStack stack = new WindowStack();
+        this._stacks.Add(stack);
+        return stack;
     }
 
-    public void PopAndSend()
+    public void OnWindowClosed(string windowName)
     {
-        if(noticeList.Count > 0)
+        foreach(WindowStack stack in _dirtyStacks)
+        {
+            _stacks.Remove(stack);
+        }
+        _dirtyStacks.Clear();
+        foreach (WindowStack stack in _stacks)
+        {
+            if (stack.curWindowName == windowName)
+            {
+                if (stack.PopAndShowNext())
+                {
+                    stack.ClearStack();
+                    _dirtyStacks.Add(stack);
+                }
+            }
+        }
+    }
+}
+
+public class WindowStack {
+
+    bool showing = false;
+
+    public WindowStack PushWindow(string windowName, int index, params object[] noticeBody)
+    {
+        StackShowNotice stackNotice = new StackShowNotice(windowName, index, noticeBody);
+        noticeList.Add(stackNotice);
+        return this;
+    }
+
+    public void BeginShow()
+    {
+        if (!this.showing)
+        {
+            this.showing = true;
+            this.PopAndShowNext();
+        }
+    }
+
+    public bool PopAndShowNext()
+    {
+        if (showing && noticeList.Count > 0)
         {
             sendingNotice = noticeList[0];
-            Facade.SendNotice(sendingNotice.index, sendingNotice.type, sendingNotice.body);
+            Facade.SendNotice(sendingNotice.index, Command.Command_Show, sendingNotice.body);
             noticeList.RemoveAt(0);
         }
+        return showing && noticeList.Count <= 0;
     }
 
     public void ClearStack()
@@ -45,30 +87,31 @@ public class WindowStack {
         noticeList.Clear();
     }
 
-    public void OnWindowClosed(string windowName)
+    public string curWindowName
     {
-        if (sendingNotice != null && sendingNotice.windowName == windowName)
+        get
         {
-            PopAndSend();
+            if (sendingNotice != null)
+            {
+                return sendingNotice.windowName;
+            }
+            return "";
         }
     }
-
-    StackNotice sendingNotice = null;
-    List<StackNotice> noticeList = new List<StackNotice>();
+    StackShowNotice sendingNotice = null;
+    List<StackShowNotice> noticeList = new List<StackShowNotice>();
 }
 
-public class StackNotice
+public class StackShowNotice
 {
     public string windowName;
     public int index;
-    public int type;
     public object[] body;
 
-    public StackNotice(string windowName, int index, int type, object[] body)
+    public StackShowNotice(string windowName, int index, object[] body)
     {
         this.windowName = windowName;
         this.index = index;
-        this.type = type;
         this.body = body;
     }
 }

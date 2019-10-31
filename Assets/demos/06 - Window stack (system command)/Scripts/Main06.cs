@@ -13,7 +13,12 @@ public class Main06 : MonoBehaviour {
 	void Start () {
         Facade.InitMVC();
         Worker_Yue.RegisterCommands();
-        WindowStack.ins.PopAndSend();
+
+        WindowStackManager.ins.CreateWindowStack()
+            .PushWindow("PreAWindow", PreACommand.Index)
+            .PushWindow("PreBWindow", PreBCommand.Index)
+            .PushWindow("PreCWindow", PreCCommand.Index)
+            .BeginShow();
 	}
 	
 }

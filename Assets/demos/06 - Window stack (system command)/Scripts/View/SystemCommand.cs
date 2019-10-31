@@ -11,7 +11,7 @@ class SystemCommand : Command
         switch(notice.GetType())
         {
             case Monitor_Closed:
-                WindowStack.ins.OnWindowClosed(notice.GetBody()[0].ToString());
+                WindowStackManager.ins.OnWindowClosed(notice.GetBody()[0].ToString());
                 break;
         }
 

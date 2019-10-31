@@ -17,10 +17,6 @@ public class Worker_Yue {
         Facade.RegisterCommand(PreACommand.Index, new PreACommand());
         Facade.RegisterCommand(PreBCommand.Index, new PreBCommand());
         Facade.RegisterCommand(PreCCommand.Index, new PreCCommand());
-
-        WindowStack.ins.PushStack("PreAWindow", PreACommand.Index, Command.Command_Show);
-        WindowStack.ins.PushStack("PreBWindow", PreBCommand.Index, Command.Command_Show);
-        WindowStack.ins.PushStack("PreCWindow", PreCCommand.Index, Command.Command_Show);
     }
 	
 }
