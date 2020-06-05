@@ -54,10 +54,17 @@ public class WindowStack {
 
     bool showing = false;
 
-    public WindowStack PushWindow(string windowName, int index, params object[] noticeBody)
+    public WindowStack PushWindow(string windowName, int cmdIndex, params object[] noticeBody)
     {
-        StackShowNotice stackNotice = new StackShowNotice(windowName, index, noticeBody);
+        StackShowNotice stackNotice = new StackShowNotice(windowName, cmdIndex, noticeBody);
         noticeList.Add(stackNotice);
+        return this;
+    }
+
+    public WindowStack InsertWindow(int index, string windowName, int cmdIndex, params object[] noticeBody)
+    {
+        StackShowNotice stackNotice = new StackShowNotice(windowName, cmdIndex, noticeBody);
+        noticeList.Insert(index, stackNotice);
         return this;
     }
 

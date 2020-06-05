@@ -17,7 +17,7 @@ public class Main06 : MonoBehaviour {
         WindowStackManager.ins.CreateWindowStack()
             .PushWindow("PreAWindow", PreACommand.Index)
             .PushWindow("PreBWindow", PreBCommand.Index)
-            .PushWindow("PreCWindow", PreCCommand.Index)
+            .InsertWindow(0, "PreCWindow", PreCCommand.Index)
             .BeginShow();
 	}
 	
