@@ -34,6 +34,8 @@ namespace itfantasy.umvc
             }
         }
 
+        public object token { get; set; }
+
         public void SendNotice(int cmdIndex, int noticeType, params object[] body)
         {
             Facade.SendNotice(cmdIndex, noticeType, body);

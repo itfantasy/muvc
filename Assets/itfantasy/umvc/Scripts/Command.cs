@@ -107,6 +107,7 @@ namespace itfantasy.umvc
             }
         }
 
+        public object stateObj { get; set; }
         public object token { get; set; }
 
         #endregion
@@ -248,9 +249,9 @@ namespace itfantasy.umvc
             Facade.ChangeScene(sceneName, callback, token);
         }
 
-        protected Action CancelSceneChange()
+        protected IScenePauser PauseSceneChange()
         {
-            return Facade.CancelSceneChange();
+            return Facade.PauseSceneChange();
         }
 
         #endregion

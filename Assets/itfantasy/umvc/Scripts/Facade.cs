@@ -172,23 +172,23 @@ namespace itfantasy.umvc
             _sceneCallbacks[sceneName].Add(new AsyncArg(callback, token));
         }
 
-        private static bool _sceneChangeCanceling = false;
-        private static string _continueSceneName = "";
-        private static object _continueCustom = null;
+        private static bool _sceneChangePausing = false;
+        private static string _pausingSceneName = "";
+        private static object _scenePausingCustom = null;
 
-        public static Action CancelSceneChange()
+        public static IScenePauser PauseSceneChange()
         {
-            _sceneChangeCanceling = true;
-            return () => {
+            _sceneChangePausing = true;
+            return new ScenePauser(() => {
                 if (_sceneLoader != null)
                 {
-                    _sceneLoader.Invoke(_continueSceneName, _continueCustom);
+                    _sceneLoader.Invoke(_pausingSceneName, _scenePausingCustom);
                 }
                 else
                 {
-                    SceneManager.LoadScene(_continueSceneName);
+                    SceneManager.LoadScene(_pausingSceneName);
                 }
-            };
+            });
         }
 
         public static void ChangeScene(string sceneName, Action<object> callback = null, object token = null, object custom = null)
@@ -204,9 +204,9 @@ namespace itfantasy.umvc
             }
             else
             {
-                _sceneChangeCanceling = false;
-                _continueSceneName = sceneName;
-                _continueCustom = custom;
+                _sceneChangePausing = false;
+                _pausingSceneName = sceneName;
+                _scenePausingCustom = custom;
 
                 SystemNotice(Command.Monitor_SceneLeaving, new object[] { _curSceneName, sceneName });
                 foreach (Command cmd in _commandDictionary.Values)
@@ -223,9 +223,9 @@ namespace itfantasy.umvc
                 }
                 SystemNotice(Command.Monitor_SceneLeaved, new object[] { _curSceneName, sceneName });
 
-                if (_sceneChangeCanceling)
+                if (_sceneChangePausing)
                 {
-                    _sceneChangeCanceling = false;
+                    _sceneChangePausing = false;
                     return;
                 }
 
@@ -315,9 +315,9 @@ namespace itfantasy.umvc
             _monitorDict.Clear();
             _sceneCallbacks.Clear();
 
-            _sceneChangeCanceling = false;
-            _continueSceneName = "";
-            _continueCustom = null;
+            _sceneChangePausing = false;
+            _pausingSceneName = "";
+            _scenePausingCustom = null;
         }
 
         public static void RegisterDefaultLoaders(SceneLoader sceneLoader, 
@@ -329,19 +329,4 @@ namespace itfantasy.umvc
         }
     }
 
-    public class AsyncArg
-    {
-        public Action<object> callback;
-        public object token;
-
-        public AsyncArg(Action<object> callback, object token)
-        {
-            this.callback = callback;
-            this.token = token;
-        }
-    }
-
-    public delegate void SceneLoader(string sceneName, object custom);
-    public delegate void ResourceLoader(string resourceName, Action<GameObject> callback, object custom);
-    public delegate GameObject SyncResourceLoader(string resourceName, object custom);
 }

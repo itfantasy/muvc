@@ -42,6 +42,8 @@ namespace itfantasy.umvc
             }
         }
 
+        protected object _viewObj { get; set; }
+
         public object token { get; set; }
 
         public void SignCommand(Command command)
@@ -245,5 +247,33 @@ namespace itfantasy.umvc
             Destroy(this.gameObject);
         }
 
+        #region state keeping...
+
+        protected void SetViewObj(object vo)
+        {
+            if (vo != null)
+            {
+                this._viewObj = vo;
+                this.UpdateViewContent();
+            }
+        }
+
+        protected void SaveViewObj()
+        {
+            if (this._viewObj != null)
+            {
+                this._command.stateObj = this._viewObj;
+            }
+        }
+
+        protected void LoadViewObj()
+        {
+            if (this._viewObj == null)
+            {
+                this.SetViewObj(this._command.stateObj);
+            }
+        }
+
+        #endregion
     }
 }

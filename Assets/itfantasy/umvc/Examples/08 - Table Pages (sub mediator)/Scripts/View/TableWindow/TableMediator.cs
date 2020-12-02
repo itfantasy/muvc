@@ -18,13 +18,11 @@ public class TableMediator : Mediator
         }
     }
 
-    TableVo _viewObj;
-
     public TableVo viewObj
     {
         get
         {
-            return this._viewObj;
+            return this._viewObj as TableVo;
         }
     }
 
@@ -46,31 +44,6 @@ public class TableMediator : Mediator
         mediatorList.Add(AttachSubMediator<SubPageMediator>(this.transform.Find("Image3").gameObject));
 
         base.OnInitialize();
-    }
-
-    public void SetViewObj(TableVo vo)
-    {
-		if (vo != null)
-		{
-			this._viewObj = vo;
-			this.UpdateViewContent();
-		}
-    }
-
-    private void SaveViewObj()
-    {
-        if (this._viewObj != null)
-        {
-            this._command.token = this._viewObj;
-        }
-    }
-
-    private void LoadViewObj()
-    {
-		if (this._viewObj == null)
-		{
-			this.SetViewObj(this._command.token as TableVo);
-		}
     }
 
     public override void UpdateViewContent()

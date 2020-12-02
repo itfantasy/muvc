@@ -7,7 +7,7 @@ namespace itfantasy.umvc
 {
     public class Model : IDisposable
     {
-        public object tag;
+        public object token { get; set; }
 
         public virtual void Initialize(JsonData json) { }
 

@@ -22,17 +22,15 @@ public class CodeGenMediator : Mediator
 
 	CodeGenView view;
 
-    CodeGenVo _viewObj;
-
     public CodeGenVo viewObj
     {
         get
         {
-            return this._viewObj;
+            return this._viewObj as CodeGenVo;
         }
     }
 
-    static CodeGenMediator that;
+    static CodeGenMediator that { get; set; }
 
 	#endregion
 
@@ -44,35 +42,6 @@ public class CodeGenMediator : Mediator
 
         base.OnInitialize();
     }
-
-    #region state keeping...
-
-    public void SetViewObj(CodeGenVo vo)
-    {
-		if (vo != null)
-		{
-			this._viewObj = vo;
-			this.UpdateViewContent();
-		}
-    }
-
-    private void SaveViewObj()
-    {
-        if (this._viewObj != null)
-        {
-            this._command.token = this._viewObj;
-        }
-    }
-
-    private void LoadViewObj()
-    {
-		if (this._viewObj == null)
-		{
-			this.SetViewObj(this._command.token as CodeGenVo);
-		}
-    }
-
-	#endregion
 
     public override void UpdateViewContent()
     {    

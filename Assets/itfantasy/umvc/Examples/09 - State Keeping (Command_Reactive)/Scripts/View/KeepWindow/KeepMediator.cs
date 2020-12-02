@@ -18,13 +18,11 @@ public class KeepMediator : Mediator
         }
     }
 
-    KeepVo _viewObj;
-
     public KeepVo viewObj
     {
         get
         {
-            return this._viewObj;
+            return this._viewObj as KeepVo;
         }
     }
 
@@ -41,28 +39,6 @@ public class KeepMediator : Mediator
         this.input = this.transform.Find("Image/InputField").GetComponent<InputField>();
         this.slider = this.transform.Find("Image/Slider").GetComponent<Slider>();
         base.OnInitialize();
-    }
-
-    public void SetViewObj(KeepVo vo)
-    {
-		if (vo != null)
-		{
-			this._viewObj = vo;
-			this.UpdateViewContent();
-		}
-    }
-
-    private void SaveViewObj()
-    {
-        this._command.token = this._viewObj;
-    }
-
-    private void LoadViewObj()
-    {
-		if (this._viewObj == null)
-		{
-			this.SetViewObj(this._command.token as KeepVo);
-		}
     }
 
     public override void UpdateViewContent()
